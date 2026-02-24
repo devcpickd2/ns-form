@@ -49,8 +49,8 @@ const produkSpec = {
             { nama: "AC A (Sipernat 22s)", kode: "", berat: "0.44" }
         ],
         premix: [
-            { nama: "NPRHSCMDA", kode: "", berat: "8.28" },
-            { nama: "NPRHSCMDB", kode: "", berat: "12.26" }
+        { nama: "NPRCSP1", kode: "", berat: "5.3" },
+        { nama: "APRCSP1", kode: "", berat: "5.3" }
         ]
     },
     "Bumbu Powder Ayam Bawang": {
@@ -206,130 +206,185 @@ const produkSpec = {
     },
     "Yang Ayam Fried Chicken": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "160.58" },
-            { nama: "COS (CORN STRACH)", kode: "", berat: "10.20" },
-            { nama: "Bumbu Marinasi F1A - 19311", kode: "", berat: "20.0" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "80.29" },
+        { nama: "COS (CORN STRACH)", kode: "", berat: "5.10" },
+        { nama: "Bumbu Marinasi F1A - 19311", kode: "", berat: "10.0" }
         ],
         premix: [
-            { nama: "NPRAYFC", kode: "", berat: "9.25" }
+        { nama: "NPRAYFC", kode: "", berat: "4.625" }
         ]
     },
     "PFM Batter Breader New": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "70.64" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "5.04" },
-            { nama: "MWC B (Battercrips)", kode: "", berat: "9.88" },
-            { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.20" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "70.64" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "5.04" },
+        { nama: "MWC B (Battercrips)", kode: "", berat: "9.88" },
+        { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.20" }
         ],
         premix: [
-            { nama: "NPRPFB1", kode: "", berat: "11.24" },
-            { nama: "APRPFB1", kode: "", berat: "3" }
+        { nama: "NPRPFB1", kode: "", berat: "11.24" },
+        { nama: "APRPFB1", kode: "", berat: "3" }
         ]
     },
     "Breader Spicy Jepang": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "61.41" },
-            { nama: "MWC B (Battercrips)", kode: "", berat: "20.47" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "3.07" },
-            { nama: "COS (CORN STRACH)", kode: "", berat: "7.164" },
-            { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.612" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "61.41" },
+        { nama: "MWC B (Battercrips)", kode: "", berat: "20.47" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "3.07" },
+        { nama: "COS (CORN STRACH)", kode: "", berat: "7.164" },
+        { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.612" }
         ],
         premix: [
-            { nama: "PROR11", kode: "", berat: "7.776" }
+        { nama: "PROR11", kode: "", berat: "7.776" }
         ]
     },
     "Breader Original Jepang": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "61.41" },
-            { nama: "MWC B (Battercrips)", kode: "", berat: "20.47" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "3.07" },
-            { nama: "COS (CORN STRACH)", kode: "", berat: "7.164" },
-            { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.105" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "61.41" },
+        { nama: "MWC B (Battercrips)", kode: "", berat: "20.47" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "3.07" },
+        { nama: "COS (CORN STRACH)", kode: "", berat: "7.164" },
+        { nama: "PAO B (Paprika Oil)", kode: "", berat: "0.105" }
         ],
         premix: [
-            { nama: "PRORI", kode: "", berat: "7.776" }
+        { nama: "PRORI", kode: "", berat: "7.776" }
         ]
     },
     "BM 1329 Delistripe": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "137.50" },
-            { nama: "MWC B (Battercrips)", kode: "", berat: "23.92" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "137.50" },
+        { nama: "MWC B (Battercrips)", kode: "", berat: "23.92" }
         ],
         premix: [
-            { nama: "NPRDEL 1", kode: "", berat: "19.08" },
-            { nama: "NPRDEL 2", kode: "", berat: "19.50" }
+        { nama: "NPRDEL 1", kode: "", berat: "19.08" },
+        { nama: "NPRDEL 2", kode: "", berat: "19.50" }
         ]
     },
     "CPI Sajiku": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "71.02" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "14.08" },
-            { nama: "AC A (Sipernat)", kode: "", berat: "0.42" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "71.02" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "14.08" },
+        { nama: "AC A (Sipernat)", kode: "", berat: "0.42" }
         ],
         premix: [
-            { nama: "APRTPSA", kode: "", berat: "14.46" }
+        { nama: "APRTPSA", kode: "", berat: "14.46" }
         ]
     },
     "Crispy Breader": {
         raw: [
-            { nama: "TER KOMPAS/LONCENG", kode: "", berat: "66.728" },
-            { nama: "MSC A (Batterbind)", kode: "", berat: "12.58" },
-            { nama: "MSC B (Elastigel)", kode: "", berat: "12.58" },
-            { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.126" }
+        { nama: "TER KOMPAS/LONCENG", kode: "", berat: "66.728" },
+        { nama: "MSC A (Batterbind)", kode: "", berat: "12.58" },
+        { nama: "MSC B (Elastigel)", kode: "", berat: "12.58" },
+        { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.126" }
         ],
         premix: [
-            { nama: "NPRCRB", kode: "", berat: "5.338" },
-            { nama: "APRCRB", kode: "", berat: "2.598" }
+        { nama: "NPRCRB", kode: "", berat: "5.338" },
+        { nama: "APRCRB", kode: "", berat: "2.598" }
+        ]
+    },
+    "Crispy Breader Japan": {
+        raw: [
+        { nama: "TER KOMPAS/LONCENG", kode: "", berat: "66.728" },
+        { nama: "MSC A (Batterbind)", kode: "", berat: "25.160" },
+        { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.126" }
+        ],
+        premix: [
+        { nama: "NPRCRB JPN", kode: "", berat: "5.388" },
+        { nama: "APRCRB", kode: "", berat: "2.598" }
         ]
     },
     "FP HSC Breader": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "178.72" },
-            { nama: "COS (CORN STRACH)", kode: "", berat: "11.28" },
-            { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.8" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "178.72" },
+        { nama: "COS (CORN STRACH)", kode: "", berat: "11.28" },
+        { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.8" }
         ],
         premix: [
-            { nama: "NPRHSC", kode: "", berat: "9.2" }
+        { nama: "NPRHSC", kode: "", berat: "9.2" }
         ]
     },
     "FP FDT1 Breader": {
-        raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "168.36" },
-            { nama: "COS (CORN STRACH)", kode: "", berat: "12.84" },
-            { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.56" }
+        raw: [ 
+        { nama: "TER A (LONCENG)", kode: "", berat: "168.36" },
+        { nama: "COS (CORN STRACH)", kode: "", berat: "12.84" },
+        { nama: "PAPRIKA OLEORESIN INDESSO", kode: "", berat: "0.56" }
         ],
         premix: [
-            { nama: "NPRFDT", kode: "", berat: "18.232" }
+        { nama: "NPRFDT", kode: "", berat: "18.232" }
         ]
     },
     "FP BM37": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "116" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "72.86" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "116" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "72.86" }
         ],
         premix: [
-            { nama: "NPR37M", kode: "", berat: "11.140" }
+        { nama: "NPR37M", kode: "", berat: "11.140" }
         ]
     },
     "FP BM38": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "156" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "31" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "156" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "31" }
         ],
         premix: [
-            { nama: "NPR38M", kode: "", berat: "13" }
+        { nama: "NPR38M", kode: "", berat: "13" }
         ]
     },
     "Battermix": {
         raw: [
-            { nama: "TER A (LONCENG)", kode: "", berat: "93.5" },
-            { nama: "TSN (TAPIOKA)", kode: "", berat: "47.7" },
-            { nama: "MTP C", kode: "", berat: "40" }
+        { nama: "TER A (LONCENG)", kode: "", berat: "93.5" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "47.7" },
+        { nama: "MTP C", kode: "", berat: "40" }
         ],
         premix: [
-            { nama: "NPRBM", kode: "", berat: "18.8" }
+        { nama: "NPRBM", kode: "", berat: "18.8" }
         ]
     },
+    "Bubble Crumb Dry Matter": {
+        raw: [
+        { nama: "TBR", kode: "", berat: "65.78" },
+        { nama: "COS", kode: "", berat: "65.78" },
+        { nama: "TER E", kode: "", berat: "65.78" },
+        { nama: "FILL A", kode: "", berat: "1.10" }
+        ],
+        premix: [
+        { nama: "NP200BBLC", kode: "", berat: "0.082" },
+        { nama: "N200BBLC", kode: "", berat: "1.486" }
+        ]
+    },
+    "CBO Battermix": {
+        raw: [
+        { nama: "TER A (LONCENG)", kode: "", berat: "58" },
+        { nama: "TSN (TAPIOKA)", kode: "", berat: "36.43" }
+        ],
+        premix: [
+        { nama: "PAO C", kode: "", berat: "0.1" },
+        { nama: "NBMCB", kode: "", berat: "6.2" }
+        ]
+    },
+    "CBO Predust": {
+        raw: [
+        { nama: "TER A (LONCENG)", kode: "", berat: "90.90" },
+        { nama: "COS (CORN STARCH)", kode: "", berat: "5.65" }
+        ],
+        premix: [
+        { nama: "NPDCB", kode: "", berat: "3.25" },
+        { nama: "PAO B", kode: "", berat: "0.2" }
+        ]
+    },
+    "FCAN Breader": {
+        raw: [
+        { nama: "TERIGU KOMPAS/LONCENG", kode: "", berat: "66.300" },
+        { nama: "MCS A (Batterbind)", kode: "", berat: "12.75" },
+        { nama: "MCS B (Elastigel)", kode: "", berat: "12.75" }
+        ],
+        premix: [
+        { nama: "NBFCAN", kode: "", berat: "10.580" },
+        { nama: "ABFCAN", kode: "", berat: "2.626" },
+        { nama: "PAO C", kode: "", berat: "0.272" }
+        ]
+    }
 };
 
 console.log("produkSpec loaded ✅", produkSpec);

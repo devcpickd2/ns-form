@@ -60,9 +60,9 @@
 
             <div id="collapseDataMaster" class="collapse <?= $active_nav == 'pegawai' | $active_nav == 'departemen' | $active_nav == 'plant' | $active_nav == 'peralatan' | $active_nav == 'produk' ?'show':'';?>" aria-labelledby="headingDataMaster" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <!-- <a class="collapse-item <?= $active_nav == 'pegawai' ?'active':'';?>" href="<?= base_url('pegawai')?>">Pegawai</a>
+                    <a class="collapse-item <?= $active_nav == 'pegawai' ?'active':'';?>" href="<?= base_url('pegawai')?>">Pegawai</a>
                     <a class="collapse-item <?= $active_nav == 'departemen' ?'active':'';?>" href="<?= base_url('departemen')?>">Departemen</a>
-                    <a class="collapse-item <?= $active_nav == 'plant' ?'active':'';?>" href="<?= base_url('plant')?>">Plant</a> -->
+                    <a class="collapse-item <?= $active_nav == 'plant' ?'active':'';?>" href="<?= base_url('plant')?>">Plant</a>
                     <a class="collapse-item <?= $active_nav == 'produk' ?'active':'';?>" href="<?= base_url('produk')?>">List Produk</a>
                     <a class="collapse-item <?= $active_nav == 'peralatan' ?'active':'';?>" href="<?= base_url('peralatan')?>">Peralatan</a>
                 </div>
@@ -118,7 +118,7 @@
         <div id="collapseQC3" class="collapse <?= $active_nav == 'metal' |  $active_nav == 'falserejection' | $active_nav == 'kontaminasi' |  $active_nav == 'releasepacking' |  $active_nav == 'pengemasan' ?'show':'';?>" aria-labelledby="headingQC" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item <?= $active_nav == 'metal' ?'active':'';?>" href="<?= base_url('metal')?>">Pemeriksaan Metal Detector</a>
-                <a class="collapse-item <?= $active_nav == 'falserejection' ?'active':'';?>" href="<?= base_url('falserejection')?>">Monitoring False Rejection</a>
+                <!-- <a class="collapse-item <?= $active_nav == 'falserejection' ?'active':'';?>" href="<?= base_url('falserejection')?>">Monitoring False Rejection</a> -->
                 <a class="collapse-item <?= $active_nav == 'kontaminasi' ?'active':'';?>" href="<?= base_url('kontaminasi')?>">Kontaminasi Benda Asing</a>
                 <a class="collapse-item <?= $active_nav == 'pengemasan' ?'active':'';?>" href="<?= base_url('pengemasan')?>">Pemeriksaan Proses Pengemasan</a>
                 <a class="collapse-item <?= $active_nav == 'releasepacking' ?'active':'';?>" href="<?= base_url('releasepacking')?>">Release Packing</a>
@@ -183,7 +183,7 @@
                     <div id="collapseQC23" class="collapse <?= ( $active_nav == 'verifikasi-metal' || $active_nav == 'verifikasi-falserejection' || $active_nav == 'verifikasi-kontaminasi' || $active_nav == 'verifikasi-releasepacking' || $active_nav == 'verifikasi-pengemasan' ) ? 'show' : ''; ?>" aria-labelledby="headingQC" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item <?= $active_nav == 'verifikasi-metal' ? 'active' : ''; ?>" href="<?= base_url('metal/verifikasi')?>">Pemeriksaan Metal Detector</a>
-                            <a class="collapse-item <?= $active_nav == 'verifikasi-falserejection' ? 'active' : ''; ?>" href="<?= base_url('falserejection/verifikasi')?>">Monitoring False Rejection</a>
+                            <!-- <a class="collapse-item <?= $active_nav == 'verifikasi-falserejection' ? 'active' : ''; ?>" href="<?= base_url('falserejection/verifikasi')?>">Monitoring False Rejection</a> -->
                             <a class="collapse-item <?= $active_nav == 'verifikasi-kontaminasi' ? 'active' : ''; ?>" href="<?= base_url('kontaminasi/verifikasi')?>">Kontaminasi Benda Asing</a>
                             <a class="collapse-item <?= $active_nav == 'verifikasi-pengemasan' ? 'active' : ''; ?>" href="<?= base_url('pengemasan/verifikasi')?>">Pemeriksaan Proses Pengemasan</a>
                             <a class="collapse-item <?= $active_nav == 'verifikasi-releasepacking' ? 'active' : ''; ?>" href="<?= base_url('releasepacking/verifikasi')?>">Release Packing</a>

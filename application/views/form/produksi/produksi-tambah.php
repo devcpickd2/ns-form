@@ -103,7 +103,6 @@
                     <div class="col-sm-4">
                         <label class="form-label font-weight-bold">Hasil Mixing</label>
                         <select name="hasil_mixing" class="form-control <?= form_error('hasil_mixing') ? 'is-invalid' : '' ?>">
-                            <!-- <option value="">-- Pilih --</option> -->
                             <option value="Oke" <?= set_value('hasil_mixing') == 'Oke' ? 'selected' : '' ?>>Oke</option>
                             <option value="Tidak Oke" <?= set_value('hasil_mixing') == 'Tidak Oke' ? 'selected' : '' ?>>Tidak Oke</option>
                         </select>
@@ -113,12 +112,22 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <label class="form-label font-weight-bold">Waktu Mixing Premix (Menit)</label>
-                        <input type="number" name="waktu_mixing_premix" 
-                        class="form-control <?= form_error('waktu_mixing_premix') ? 'is-invalid' : '' ?>" 
-                        value="<?= set_value('waktu_mixing_premix'); ?>" min="0">
-                        <div class="invalid-feedback <?= !empty(form_error('waktu_mixing_premix')) ? 'd-block' : '' ?>">
-                            <?= form_error('waktu_mixing_premix') ?>
+                        <label class="form-label font-weight-bold">Waktu Mulai Mixing</label>
+                        <input type="time" name="waktu_mulai_mixing" 
+                        class="form-control <?= form_error('waktu_mulai_mixing') ? 'is-invalid' : '' ?>" 
+                        value="<?= set_value('waktu_mulai_mixing'); ?>">
+                        <div class="invalid-feedback <?= !empty(form_error('waktu_mulai_mixing')) ? 'd-block' : '' ?>">
+                            <?= form_error('waktu_mulai_mixing') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label font-weight-bold">Waktu Selesai Mixing</label>
+                        <input type="time" name="waktu_selesai_mixing" 
+                        class="form-control <?= form_error('waktu_selesai_mixing') ? 'is-invalid' : '' ?>" 
+                        value="<?= set_value('waktu_selesai_mixing'); ?>">
+                        <div class="invalid-feedback <?= !empty(form_error('waktu_selesai_mixing')) ? 'd-block' : '' ?>">
+                            <?= form_error('waktu_selesai_mixing') ?>
                         </div>
                     </div>
                 </div>
@@ -185,8 +194,8 @@
 <!-- load jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- load produkSpec -->
-<script src="<?= base_url('assets/js/produkSpec_full.js?v=<?=time()?>') ?>"></script>
-
+<!-- <script src="<?= base_url('assets/js/produkSpec_full.js?v=4') ?>"></script> -->
+<script src="<?= base_url('assets/js/produkSpec_full.js?v=<?= time() ?>') ?>"></script>
 <script>
     $(document).ready(function () {
 
@@ -194,26 +203,26 @@
             let html = ""; 
             $.each(list, function (i, v) {
                 html += `
-            <div class="rawmat-group border p-3 mb-3 rounded bg-light">
+                <div class="rawmat-group border p-3 mb-3 rounded bg-light">
                 <div class="form-group row">
-                    <div class="col-md-3">
-                        <input type="text" name="raw_nama[]" class="form-control" value="${v.nama}" readonly>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="raw_kode[]" class="form-control" value="${v.kode}">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="raw_berat[]" class="form-control" value="${v.berat}">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Sensori</label>
-                        <div class="d-flex gap-2">
-                            <input type="radio" class="btn-check" name="raw_sens[${i}]" id="raw-oke-${i}" value="oke">
-                            <label class="btn btn-outline-success" for="raw-oke-${i}">Oke</label>
-                            <input type="radio" class="btn-check" name="raw_sens[${i}]" id="raw-tidak-${i}" value="tidak">
-                            <label class="btn btn-outline-danger" for="raw-tidak-${i}">Tidak</label>
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                <input type="text" name="raw_nama[]" class="form-control" value="${v.nama}" readonly>
+                </div>
+                <div class="col-md-2">
+                <input type="text" name="raw_kode[]" class="form-control" value="${v.kode}">
+                </div>
+                <div class="col-md-2">
+                <input type="text" name="raw_berat[]" class="form-control" value="${v.berat}">
+                </div>
+                <div class="col-md-3">
+                <label class="form-label">Sensori</label>
+                <div class="d-flex gap-2">
+                <input type="radio" class="btn-check" name="raw_sens[${i}]" id="raw-oke-${i}" value="oke">
+                <label class="btn btn-outline-success" for="raw-oke-${i}">Oke</label>
+                <input type="radio" class="btn-check" name="raw_sens[${i}]" id="raw-tidak-${i}" value="tidak">
+                <label class="btn btn-outline-danger" for="raw-tidak-${i}">Tidak</label>
+                </div>
+                </div>
                 </div>
                 </div>`;
             });
@@ -224,26 +233,26 @@
             let html = "";
             $.each(list, function (i, v) {
                 html += `
-            <div class="premix-group border p-3 mb-3 rounded bg-light">
+                <div class="premix-group border p-3 mb-3 rounded bg-light">
                 <div class="form-group row">
-                    <div class="col-md-3">
-                        <input type="text" name="premix_nama[]" class="form-control" value="${v.nama}" readonly>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="premix_kode[]" class="form-control" value="${v.kode}">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="premix_berat[]" class="form-control" value="${v.berat}">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Sensori</label>
-                        <div class="d-flex gap-2">
-                            <input type="radio" class="btn-check" name="premix_sens[${i}]" id="premix-oke-${i}" value="oke">
-                            <label class="btn btn-outline-success" for="premix-oke-${i}">Oke</label>
-                            <input type="radio" class="btn-check" name="premix_sens[${i}]" id="premix-tidak-${i}" value="tidak">
-                            <label class="btn btn-outline-danger" for="premix-tidak-${i}">Tidak</label>
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                <input type="text" name="premix_nama[]" class="form-control" value="${v.nama}" readonly>
+                </div>
+                <div class="col-md-2">
+                <input type="text" name="premix_kode[]" class="form-control" value="${v.kode}">
+                </div>
+                <div class="col-md-2">
+                <input type="text" name="premix_berat[]" class="form-control" value="${v.berat}">
+                </div>
+                <div class="col-md-3">
+                <label class="form-label">Sensori</label>
+                <div class="d-flex gap-2">
+                <input type="radio" class="btn-check" name="premix_sens[${i}]" id="premix-oke-${i}" value="oke">
+                <label class="btn btn-outline-success" for="premix-oke-${i}">Oke</label>
+                <input type="radio" class="btn-check" name="premix_sens[${i}]" id="premix-tidak-${i}" value="tidak">
+                <label class="btn btn-outline-danger" for="premix-tidak-${i}">Tidak</label>
+                </div>
+                </div>
                 </div>
                 </div>`;
             });
@@ -251,20 +260,22 @@
         }
 
     // Event saat pilih produk
-        $("#nama-produk").on("change", function(){
-            const namaProduk = $(this).find(":selected").data("nama");
+    $("#nama-produk").on("change", function(){
+        const namaProduk = $(this).find(":selected").data("nama");
 
-        // cek apakah ada di produkSpec
-            if(produkSpec.hasOwnProperty(namaProduk)){
-                renderRawmat(produkSpec[namaProduk].raw);
-                renderPremix(produkSpec[namaProduk].premix);
-            } else {
-                $("#form-rawmat-wrapper").empty();
-                $("#form-premix-wrapper").empty();
-            }
-        });
+        console.log("Dipilih:", `"${namaProduk}"`);
+        console.log("Ada di produkSpec?", produkSpec[namaProduk]);
+
+        if (produkSpec[namaProduk]) {
+            renderRawmat(produkSpec[namaProduk].raw);
+            renderPremix(produkSpec[namaProduk].premix);
+        } else {
+            $("#form-rawmat-wrapper").empty();
+            $("#form-premix-wrapper").empty();
+        }
+    });
 
     // Trigger kalau sebelumnya ada value terpilih (misal saat edit)
-        $("#nama-produk").trigger("change");
-    });
+    $("#nama-produk").trigger("change");
+});
 </script>

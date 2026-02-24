@@ -34,8 +34,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="font-weight-bold">Pukul</label>
-                        <input type="time" name="pukul" class="form-control" 
-                        value="<?= date('H:00') ?>" min="01:00" max="23:00" step="3600" required>
+                        <input type="time" name="pukul" class="form-control" step="3600" required>
                     </div>
                 </div>
 

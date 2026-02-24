@@ -14,10 +14,10 @@ class User extends CI_Controller {
 	private function _map_role($roleName)
 	{
 		$mapping = [
-			'Admin' => 0,
+			'admin' => 0,
 			'Manager' => 1,
-			'Supervisor' => 2,
-			'Foreman Forelady Produksi' => 3,
+			'SPV QC' => 2,
+			'Produksi' => 3, 
 			'Forelady' => 8,
 			'QC Inspector' => 4
 		];

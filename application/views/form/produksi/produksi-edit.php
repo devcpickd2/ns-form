@@ -145,12 +145,24 @@
                         <?= form_error('hasil_mixing') ?>
                     </div>
                 </div>
+
                 <div class="col-sm-4">
-                    <label class="form-label font-weight-bold">Waktu Mixing Premix (Menit)</label>
-                    <input type="number" name="waktu_mixing_premix" class="form-control <?= form_error('waktu_mixing_premix') ? 'is-invalid' : '' ?>" 
-                    value="<?= $produksi->waktu_mixing_premix; ?>" min="0">
-                    <div class="invalid-feedback <?= !empty(form_error('waktu_mixing_premix')) ? 'd-block' : '' ?>">
-                        <?= form_error('waktu_mixing_premix') ?>
+                    <label class="form-label font-weight-bold">Waktu Mulai Mixing</label>
+                    <input type="time" name="waktu_mulai_mixing" 
+                    class="form-control <?= form_error('waktu_mulai_mixing') ? 'is-invalid' : '' ?>" 
+                    value="<?= $produksi->waktu_mulai_mixing; ?>">
+                    <div class="invalid-feedback <?= !empty(form_error('waktu_mulai_mixing')) ? 'd-block' : '' ?>">
+                        <?= form_error('waktu_mulai_mixing') ?>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="form-label font-weight-bold">Waktu Selesai Mixing</label>
+                    <input type="time" name="waktu_selesai_mixing" 
+                    class="form-control <?= form_error('waktu_selesai_mixing') ? 'is-invalid' : '' ?>" 
+                    value="<?= $produksi->waktu_selesai_mixing; ?>">
+                    <div class="invalid-feedback <?= !empty(form_error('waktu_selesai_mixing')) ? 'd-block' : '' ?>">
+                        <?= form_error('waktu_selesai_mixing') ?>
                     </div>
                 </div>
             </div>

@@ -231,6 +231,8 @@ class Falserejection extends CI_Controller {
 			$pdf->Ln();
 		}
 
+		$pdf->SetFont('times', 'I', 7);
+		$pdf->Cell(190, 5, 'QN 13/00', 0, 1, 'R'); 
 		$pdf->SetY($pdf->GetY() + 2); 
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');

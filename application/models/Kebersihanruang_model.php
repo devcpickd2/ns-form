@@ -80,7 +80,7 @@ class Kebersihanruang_model extends CI_Model {
 			'shift' => $shift,
 			'lokasi' => $lokasi,
 			'detail' => json_encode($detail), 
-			'status_produksi' => $status_produksi,
+			'status_produksi' => $status_produksi, 
 			'nama_produksi' => $nama_produksi,
 			'status_spv' => $status_spv,
 			'created_at' => date("Y-m-d H:i:s"),

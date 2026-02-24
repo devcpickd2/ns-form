@@ -33,8 +33,12 @@ class Produksi_model extends CI_Model {
 				'label' => 'Result of Mixed'
 			],
 			[
-				'field' => 'waktu_mixing_premix',
-				'label' => 'Time of mixing'
+				'field' => 'waktu_mulai_mixing',
+				'label' => 'Start of mixing'
+			],
+			[
+				'field' => 'waktu_selesai_mixing',
+				'label' => 'End of mixing'
 			],
 			[
 				'field' => 'sens_rasa',
@@ -68,7 +72,8 @@ class Produksi_model extends CI_Model {
 		$nama_produk = $this->input->post('nama_produk');
 		$kode_produksi = $this->input->post('kode_produksi');
 		$hasil_mixing = $this->input->post('hasil_mixing');
-		$waktu_mixing_premix = $this->input->post('waktu_mixing_premix');
+		$waktu_mulai_mixing = $this->input->post('waktu_mulai_mixing');
+		$waktu_selesai_mixing = $this->input->post('waktu_selesai_mixing');
 		$sens_rasa = $this->input->post('sens_rasa');
 		$sens_aroma = $this->input->post('sens_aroma');
 		$sens_tekstur = $this->input->post('sens_tekstur');
@@ -119,7 +124,8 @@ class Produksi_model extends CI_Model {
 			'nama_produk' => $nama_produk,
 			'kode_produksi' => $kode_produksi,
 			'hasil_mixing' => $hasil_mixing,
-			'waktu_mixing_premix' => $waktu_mixing_premix,
+			'waktu_mulai_mixing' => $waktu_mulai_mixing,
+			'waktu_selesai_mixing' => $waktu_selesai_mixing,
 			'premix' => json_encode($premix),
 			'raw_mat' => json_encode($raw_mat),
 			'sens_rasa' => $sens_rasa,
@@ -144,7 +150,8 @@ class Produksi_model extends CI_Model {
 			'nama_produk'         => $this->input->post('nama_produk'),
 			'kode_produksi'       => $this->input->post('kode_produksi'),
 			'hasil_mixing'        => $this->input->post('hasil_mixing'),
-			'waktu_mixing_premix' => $this->input->post('waktu_mixing_premix'),
+			'waktu_mulai_mixing'  => $this->input->post('waktu_mulai_mixing'),
+			'waktu_selesai_mixing'=> $this->input->post('waktu_selesai_mixing'),
 			'sens_rasa'           => $this->input->post('sens_rasa'),
 			'sens_aroma'          => $this->input->post('sens_aroma'),
 			'sens_tekstur'        => $this->input->post('sens_tekstur'),
@@ -423,13 +430,17 @@ class Produksi_model extends CI_Model {
 	public function get_latest_today() {
 		$plant = $this->session->userdata('plant');
 
-		$this->db->where('date', date('Y-m-d'));
-		$this->db->where('plant', $plant);
-		$this->db->order_by('created_at', 'DESC');
-		$query = $this->db->get('mixing', 1);
+		$this->db->select('mixing.*, produk.nama_produk'); 
+		$this->db->from('mixing');
+		$this->db->join('produk', 'produk.uuid = mixing.nama_produk'); 
+		$this->db->where('mixing.date', date('Y-m-d'));
+		$this->db->where('mixing.plant', $plant);
+		$this->db->order_by('mixing.created_at', 'DESC');
+		$this->db->limit(1);
 
-		return $query->row_array();
+		return $this->db->get()->row_array();
 	}
+
 
 	public function count_today_same_product() {
 		$plant = $this->session->userdata('plant'); 

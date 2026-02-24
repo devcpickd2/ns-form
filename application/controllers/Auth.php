@@ -24,6 +24,7 @@ class Auth extends CI_Controller {
 
 	public function login()
 	{
+		
 		if ($this->auth_model->current_user()) {
 			redirect('home');
 		}

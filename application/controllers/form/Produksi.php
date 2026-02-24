@@ -491,7 +491,12 @@ class Produksi extends CI_Controller {
 
 			$pdf->Cell(40, 4, 'Waktu Mixing Premix', 1, 0, 'L');
 			foreach ($chunk as $item) {
-				$pdf->Cell(35, 4, $item->waktu_mixing_premix . " menit", 1, 0, 'C');
+				$mulai = strtotime($item->waktu_mulai_mixing);
+				$selesai = strtotime($item->waktu_selesai_mixing);
+				$mulai_format = date('H:i', $mulai);
+				$selesai_format = date('H:i', $selesai);
+				$total_menit = ($selesai - $mulai) / 60;
+				$pdf->Cell(35, 4, $mulai_format . " - " . $selesai_format . " (" . $total_menit . " menit)", 1, 0, 'C');
 			}
 			for ($i = 0; $i < $emptyColumns; $i++) {
 				$pdf->Cell(35, 4, '', 1, 0, 'C');
@@ -640,7 +645,9 @@ class Produksi extends CI_Controller {
 			$pdf->Ln();
 
 			$pageIndex++;
-			$pdf->SetY($pdf->GetY() + 2); 
+			$pdf->SetFont('times', 'I', 7);
+			$pdf->Cell(320, 5, 'QN 05/00', 0, 1, 'R'); 
+			$pdf->SetY($pdf->GetY()); 
 			$pdf->SetFont('times', '', 8);
 			$pdf->Cell(5, 5, 'Catatan : ', 0, 1, 'L');
 			foreach ($chunk as $item) {
@@ -662,202 +669,334 @@ class Produksi extends CI_Controller {
 			$pdf->SetFont('times', '', 8);
 			$pdf->SetTextColor(0, 0, 0);
 
-			if ($status_verifikasi) {
-				$y_verifikasi = $y_after_keterangan;
-				$pdf->SetXY(40, $y_verifikasi + 3);
-				$pdf->Cell(60, 5, 'Dibuat Oleh,', 0, 0, 'C');
-				$pdf->SetXY(40, $y_verifikasi + 10);
-				$pdf->SetFont('times', 'U', 8);
-				$pdf->Cell(60, 5, $data['produksi']->nama_lengkap_qc, 0, 1, 'C');
-				$pdf->SetFont('times', '', 8); 
-				$pdf->SetXY(40, $y_verifikasi + 14);
-				$pdf->Cell(60, 5, 'QC Inspector', 0, 0, 'C');
+			// if ($status_verifikasi) {
+			// 	$y_verifikasi = $y_after_keterangan;
+			// 	$pdf->SetXY(40, $y_verifikasi + 3);
+			// 	$pdf->Cell(60, 5, 'Dibuat Oleh,', 0, 0, 'C');
+			// 	$pdf->SetXY(40, $y_verifikasi + 10);
+			// 	$pdf->SetFont('times', 'U', 8);
+			// 	$pdf->Cell(60, 5, $data['produksi']->nama_lengkap_qc, 0, 1, 'C');
+			// 	$pdf->SetFont('times', '', 8); 
+			// 	$pdf->SetXY(40, $y_verifikasi + 14);
+			// 	$pdf->Cell(60, 5, 'QC Inspector', 0, 0, 'C');
 
-				$pdf->SetXY(100, $y_verifikasi + 3);
-				$pdf->Cell(165, 5, 'Diketahui Oleh,', 0, 0, 'C');
-				if ($data['produksi']->status_produksi == 1 && !empty($data['produksi']->nama_produksi)) {
-					$pdf->SetXY(100, $y_verifikasi + 10);
-					$pdf->SetFont('times', 'U', 8);
-					$pdf->Cell(165, 5, $data['produksi']->nama_lengkap_produksi, 0, 0, 'C');
-					$pdf->SetFont('times', '', 8);
-					$pdf->SetXY(100, $y_verifikasi + 14);
-					$pdf->Cell(165, 5, 'Foreman/Forelady Produksi', 0, 0, 'C');
-				} else {
-					$pdf->SetXY(100, $y_verifikasi + 12);
-					$pdf->Cell(165, 5, 'Belum Diverifikasi', 0, 0, 'C');
-				}
+			// 	$pdf->SetXY(100, $y_verifikasi + 3);
+			// 	$pdf->Cell(165, 5, 'Diketahui Oleh,', 0, 0, 'C');
+			// 	if ($data['produksi']->status_produksi == 1 && !empty($data['produksi']->nama_produksi)) {
+			// 		$pdf->SetXY(100, $y_verifikasi + 10);
+			// 		$pdf->SetFont('times', 'U', 8);
+			// 		$pdf->Cell(165, 5, $data['produksi']->nama_lengkap_produksi, 0, 0, 'C');
+			// 		$pdf->SetFont('times', '', 8);
+			// 		$pdf->SetXY(100, $y_verifikasi + 14);
+			// 		$pdf->Cell(165, 5, 'Foreman/Forelady Produksi', 0, 0, 'C');
+			// 	} else {
+			// 		$pdf->SetXY(100, $y_verifikasi + 12);
+			// 		$pdf->Cell(165, 5, 'Belum Diverifikasi', 0, 0, 'C');
+			// 	}
 
-				$pdf->SetXY(260, $y_verifikasi + 1);
-				$pdf->Cell(59, 5, 'Disetujui Oleh,', 0, 0, 'C');
-				$update_tanggal = (new DateTime($data['produksi']->tgl_update))->format('d-m-Y | H:i');
-				$qr_text = "Diverifikasi secara digital oleh,\n" . $data['produksi']->nama_lengkap_spv . "\nSPV QC Bread Crumb\n" . $update_tanggal;
-				$pdf->write2DBarcode($qr_text, 'QRCODE,L', 283, $y_verifikasi + 5.5, 13, 13, null, 'N');
-				$pdf->SetXY(260, $y_verifikasi + 17);
-				$pdf->Cell(59, 5, 'Supervisor QC', 0, 0, 'C');
-			} else {
-				$pdf->SetTextColor(255, 0, 0); 
-				$pdf->SetFont('times', '', 8);
-				$pdf->SetXY(100, $y_after_keterangan);
-				$pdf->Cell(250, 5, 'Data Belum Diverifikasi', 0, 0, 'C');
-			}
-			$pdf->setPrintFooter(false);
-		}
+			// 	$pdf->SetXY(260, $y_verifikasi + 1);
+			// 	$pdf->Cell(59, 5, 'Disetujui Oleh,', 0, 0, 'C');
+			// 	$update_tanggal = (new DateTime($data['produksi']->tgl_update))->format('d-m-Y | H:i');
+			// 	$qr_text = "Diverifikasi secara digital oleh,\n" . $data['produksi']->nama_lengkap_spv . "\nSPV QC Bread Crumb\n" . $update_tanggal;
+			// 	$pdf->write2DBarcode($qr_text, 'QRCODE,L', 283, $y_verifikasi + 5.5, 13, 13, null, 'N');
+			// 	$pdf->SetXY(260, $y_verifikasi + 17);
+			// 	$pdf->Cell(59, 5, 'Supervisor QC', 0, 0, 'C');
+			// } else {
+			// 	$pdf->SetTextColor(255, 0, 0); 
+			// 	$pdf->SetFont('times', '', 8);
+			// 	$pdf->SetXY(100, $y_after_keterangan);
+			// 	$pdf->Cell(250, 5, 'Data Belum Diverifikasi', 0, 0, 'C');
+			// }
 
-		$filename = "Verifikasi Proses Produksi_{$formatted_date2}.pdf";
-		$pdf->Output($filename, 'I');
+// =======================
+// BLOK TTD DIGITAL (FINAL FIX)
+// =======================
+
+			$y_ttd   = $pdf->GetY() + 2;
+			$qr_size = 15;
+
+/* ======================
+ * QC (MULTI ORANG — DETAIL)
+ * ====================== */
+$qc_usernames  = [];
+$qc_created_at = null;
+
+foreach ($produksi_data as $item) {
+	if (!empty($item->username)) {
+		$qc_usernames[] = $item->username;
+	}
+	if (!empty($item->created_at)) {
+		$qc_created_at = $item->created_at; // ambil terakhir
+	}
+}
+
+$qc_usernames = array_unique($qc_usernames);
+
+// resolve nama lengkap QC
+$qc_nama_lengkap = [];
+foreach ($qc_usernames as $username) {
+	$nama = $this->pegawai_model->get_nama_lengkap($username);
+	if (!empty($nama)) {
+		$qc_nama_lengkap[] = $nama;
+	}
+}
+
+$qc_nama_text = !empty($qc_nama_lengkap)
+? implode(', ', $qc_nama_lengkap)
+: '-';
+
+$qc_tanggal = $qc_created_at
+? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+: '-';
+
+$qr_qc_text =
+"Dibuat secara digital oleh,\n" .
+$qc_nama_text . "\n" .
+"QC Inspector\n" .
+$qc_tanggal;
+
+
+/* ======================
+ * PRODUKSI (HEADER — BENAR)
+ * ====================== */
+$qr_produksi_text = null;
+
+if (
+	$data['produksi']->status_produksi == 1 &&
+	!empty($data['produksi']->nama_lengkap_produksi) &&
+	!empty($data['produksi']->tgl_update_prod)
+) {
+
+	$prod_tanggal = (new DateTime($data['produksi']->tgl_update_prod))
+	->format('d-m-Y | H:i');
+
+	$qr_produksi_text =
+	"Diketahui secara digital oleh,\n" .
+	$data['produksi']->nama_lengkap_produksi . "\n" .
+	"Foreman/Forelady Produksi\n" .
+	$prod_tanggal;
+}
+
+
+/* ======================
+ * SPV (HEADER)
+ * ====================== */
+$spv_tanggal = !empty($data['produksi']->tgl_update)
+? (new DateTime($data['produksi']->tgl_update))->format('d-m-Y | H:i')
+: '-';
+
+$qr_spv_text =
+"Disetujui secara digital oleh,\n" .
+$data['produksi']->nama_lengkap_spv . "\n" .
+"Supervisor QC Bread Crumb\n" .
+$spv_tanggal;
+
+
+/* ======================
+ * RENDER KE PDF
+ * ====================== */
+if ($status_verifikasi) {
+
+	$pdf->SetFont('times', '', 8);
+
+	// Judul kolom
+	$pdf->SetXY(20, $y_ttd);
+	$pdf->Cell(45, 5, 'Dibuat Oleh,', 0, 0, 'C');
+
+	$pdf->SetXY(120, $y_ttd);
+	$pdf->Cell(60, 5, 'Diketahui Oleh,', 0, 0, 'C');
+
+	$pdf->SetXY(220, $y_ttd);
+	$pdf->Cell(60, 5, 'Disetujui Oleh,', 0, 1, 'C');
+
+	// QR CODE
+	$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,  $y_ttd + 5, $qr_size, $qr_size, null, 'N');
+
+	if ($qr_produksi_text !== null) {
+		$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 142, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 	}
 
-	public function export_excel()
-	{
-		require_once(FCPATH . 'vendor/autoload.php');
+	$pdf->write2DBarcode($qr_spv_text, 'QRCODE,L', 242, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 
-		$tanggal = $this->input->post('tanggal');
-		$nama_produk = $this->input->post('nama_produk');
+	// Jabatan (TANPA NAMA — SESUAI MAU LU)
+	$pdf->SetXY(20,  $y_ttd + 22);
+	$pdf->Cell(45, 5, 'QC Inspector', 0, 0, 'C');
 
-		if (empty($tanggal) || empty($nama_produk)) {
-			show_error('Tanggal dan Nama Produk harus dipilih', 404);
-		}
+	$pdf->SetXY(120, $y_ttd + 22);
+	$pdf->Cell(60, 5, 'Foreman/Forelady Produksi', 0, 0, 'C');
 
-		$this->load->model('produksi_model');
-		$this->load->model('pegawai_model');
+	$pdf->SetXY(220, $y_ttd + 22);
+	$pdf->Cell(60, 5, 'Supervisor QC', 0, 1, 'C');
 
-		$plant = $this->session->userdata('plant');
-		$produksi_data = $this->produksi_model->get_by_date_and_produk($tanggal, $nama_produk, $plant);
-		$produksi_data_verif = $this->produksi_model->get_last_verif_by_date_and_produk($tanggal, $nama_produk, $plant);
+} else {
 
-		if (!$produksi_data || !$produksi_data_verif) {
-			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal dan produk yang dipilih.');
-			redirect('produksi/verifikasi');
-		}
+	$pdf->SetFont('times', '', 8);
+	$pdf->SetTextColor(255, 0, 0);
+	$pdf->SetXY(80, $y_ttd);
+	$pdf->Cell(120, 6, 'Data Belum Diverifikasi', 0, 1, 'C');
+	$pdf->SetTextColor(0, 0, 0);
+}
 
-		$qc = $this->pegawai_model->get_nama_lengkap($produksi_data_verif->username);
-		$spv = $this->pegawai_model->get_nama_lengkap($produksi_data_verif->nama_spv);
-		$produksi = $produksi_data_verif->nama_produksi;
 
-		$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-		$sheet = $spreadsheet->getActiveSheet();
-		$sheet->setTitle('Verifikasi Produksi');
+$pdf->setPrintFooter(false);
+$pdf->SetTextColor(0, 0, 0);
+}
 
-		$sheet->mergeCells('A1:J1');
-		$sheet->setCellValue('A1', 'VERIFIKASI PROSES PRODUKSI');
-		$sheet->getStyle('A1')->getFont()->setSize(14)->setBold(true);
-		$sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$filename = "Verifikasi Proses Produksi_{$formatted_date2}.pdf";
+$pdf->Output($filename, 'I');
+}
 
-		$sheet->setCellValue('A3', 'Tanggal');
-		$sheet->setCellValue('B3', date('d-m-Y', strtotime($produksi_data_verif->date)));
-		$sheet->setCellValue('A4', 'Shift');
-		$sheet->setCellValue('B4', $produksi_data_verif->shift);
+public function export_excel()
+{
+	require_once(FCPATH . 'vendor/autoload.php');
 
-		$row = 6;
+	$tanggal = $this->input->post('tanggal');
+	$nama_produk = $this->input->post('nama_produk');
 
-		foreach ($produksi_data as $item) {
-			$sheet->setCellValue("A{$row}", 'Nama Produk');
-			$sheet->setCellValue("B{$row}", $item->nama_produk);
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Kode Produksi');
-			$sheet->setCellValue("B{$row}", $item->kode_produksi);
-			$row++;
+	if (empty($tanggal) || empty($nama_produk)) {
+		show_error('Tanggal dan Nama Produk harus dipilih', 404);
+	}
 
-			$sheet->setCellValue("A{$row}", '=== Bahan Baku ===');
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Nama');
-			$sheet->setCellValue("B{$row}", 'Kode');
-			$sheet->setCellValue("C{$row}", 'Berat (Kg)');
-			$sheet->setCellValue("D{$row}", 'Sens');
-			$row++;
+	$this->load->model('produksi_model');
+	$this->load->model('pegawai_model');
 
-			$bahan_baku = json_decode($item->raw_mat, true);
-			if (is_array($bahan_baku)) {
-				foreach ($bahan_baku as $bahan) {
-					$sheet->setCellValue("A{$row}", $bahan['nama'] ?? '');
-					$sheet->setCellValue("B{$row}", $bahan['kode'] ?? '');
-					$sheet->setCellValue("C{$row}", $bahan['berat'] ?? '');
-					$sheet->setCellValue("D{$row}", $bahan['sens'] ?? '');
-					$row++;
-				}
-			}
+	$plant = $this->session->userdata('plant');
+	$produksi_data = $this->produksi_model->get_by_date_and_produk($tanggal, $nama_produk, $plant);
+	$produksi_data_verif = $this->produksi_model->get_last_verif_by_date_and_produk($tanggal, $nama_produk, $plant);
 
-			$row++;
-			$sheet->setCellValue("A{$row}", '=== Premix ===');
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Nama');
-			$sheet->setCellValue("B{$row}", 'Kode');
-			$sheet->setCellValue("C{$row}", 'Sens');
-			$row++;
+	if (!$produksi_data || !$produksi_data_verif) {
+		$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal dan produk yang dipilih.');
+		redirect('produksi/verifikasi');
+	}
 
-			$premix = json_decode($item->premix, true);
-			if (is_array($premix)) {
-				foreach ($premix as $p) {
-					$sheet->setCellValue("A{$row}", $p['nama'] ?? '');
-					$sheet->setCellValue("B{$row}", $p['kode'] ?? '');
-					$sheet->setCellValue("C{$row}", $p['sens'] ?? '');
-					$row++;
-				}
-			}
+	$qc = $this->pegawai_model->get_nama_lengkap($produksi_data_verif->username);
+	$spv = $this->pegawai_model->get_nama_lengkap($produksi_data_verif->nama_spv);
+	$produksi = $produksi_data_verif->nama_produksi;
 
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Hasil Mixing');
-			$sheet->setCellValue("B{$row}", $item->hasil_mixing);
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Waktu Mixing Premix');
-			$sheet->setCellValue("B{$row}", $item->waktu_mixing_premix . ' menit');
-			$row++;
+	$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+	$sheet = $spreadsheet->getActiveSheet();
+	$sheet->setTitle('Verifikasi Produksi');
 
-			$sheet->setCellValue("A{$row}", '=== Sensori ===');
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Rasa');
-			$sheet->setCellValueExplicit("B{$row}", $item->sens_rasa === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Aroma');
-			$sheet->setCellValueExplicit("B{$row}", $item->sens_aroma === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Tekstur');
-			$sheet->setCellValueExplicit("B{$row}", $item->sens_tekstur === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-			$row++;
-			$sheet->setCellValue("A{$row}", 'Warna');
-			$sheet->setCellValueExplicit("B{$row}", $item->sens_warna === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-			$row++;
+	$sheet->mergeCells('A1:J1');
+	$sheet->setCellValue('A1', 'VERIFIKASI PROSES PRODUKSI');
+	$sheet->getStyle('A1')->getFont()->setSize(14)->setBold(true);
+	$sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-			if (!empty($item->catatan)) {
-				$sheet->setCellValue("A{$row}", 'Catatan');
-				$sheet->setCellValue("B{$row}", $item->catatan);
+	$sheet->setCellValue('A3', 'Tanggal');
+	$sheet->setCellValue('B3', date('d-m-Y', strtotime($produksi_data_verif->date)));
+	$sheet->setCellValue('A4', 'Shift');
+	$sheet->setCellValue('B4', $produksi_data_verif->shift);
+
+	$row = 6;
+
+	foreach ($produksi_data as $item) {
+		$sheet->setCellValue("A{$row}", 'Nama Produk');
+		$sheet->setCellValue("B{$row}", $item->nama_produk);
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Kode Produksi');
+		$sheet->setCellValue("B{$row}", $item->kode_produksi);
+		$row++;
+
+		$sheet->setCellValue("A{$row}", '=== Bahan Baku ===');
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Nama');
+		$sheet->setCellValue("B{$row}", 'Kode');
+		$sheet->setCellValue("C{$row}", 'Berat (Kg)');
+		$sheet->setCellValue("D{$row}", 'Sens');
+		$row++;
+
+		$bahan_baku = json_decode($item->raw_mat, true);
+		if (is_array($bahan_baku)) {
+			foreach ($bahan_baku as $bahan) {
+				$sheet->setCellValue("A{$row}", $bahan['nama'] ?? '');
+				$sheet->setCellValue("B{$row}", $bahan['kode'] ?? '');
+				$sheet->setCellValue("C{$row}", $bahan['berat'] ?? '');
+				$sheet->setCellValue("D{$row}", $bahan['sens'] ?? '');
 				$row++;
 			}
-
-			$row += 2;
 		}
 
-    // Tanda Tangan
-		$sheet->setCellValue("B{$row}", 'Dibuat Oleh');
-		$sheet->setCellValue("E{$row}", 'Diketahui Oleh');
-		$sheet->setCellValue("H{$row}", 'Disetujui Oleh');
-		$row += 3;
-		$sheet->setCellValue("B{$row}", $qc ?: '-');
-		$sheet->setCellValue("E{$row}", $produksi ?: '-');
-		$sheet->setCellValue("H{$row}", $spv ?: '-');
 		$row++;
-		$sheet->setCellValue("B{$row}", 'QC Inspector');
-		$sheet->setCellValue("E{$row}", 'Foreman Produksi');
-		$sheet->setCellValue("H{$row}", 'Supervisor QC');
+		$sheet->setCellValue("A{$row}", '=== Premix ===');
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Nama');
+		$sheet->setCellValue("B{$row}", 'Kode');
+		$sheet->setCellValue("C{$row}", 'Sens');
+		$row++;
+
+		$premix = json_decode($item->premix, true);
+		if (is_array($premix)) {
+			foreach ($premix as $p) {
+				$sheet->setCellValue("A{$row}", $p['nama'] ?? '');
+				$sheet->setCellValue("B{$row}", $p['kode'] ?? '');
+				$sheet->setCellValue("C{$row}", $p['sens'] ?? '');
+				$row++;
+			}
+		}
+
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Hasil Mixing');
+		$sheet->setCellValue("B{$row}", $item->hasil_mixing);
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Waktu Mixing Premix');
+		$sheet->setCellValue("B{$row}", $item->waktu_mulai_mixing . ' - ' . $item->waktu_selesai_mixing);
+		$row++;
+
+		$sheet->setCellValue("A{$row}", '=== Sensori ===');
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Rasa');
+		$sheet->setCellValueExplicit("B{$row}", $item->sens_rasa === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Aroma');
+		$sheet->setCellValueExplicit("B{$row}", $item->sens_aroma === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Tekstur');
+		$sheet->setCellValueExplicit("B{$row}", $item->sens_tekstur === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+		$row++;
+		$sheet->setCellValue("A{$row}", 'Warna');
+		$sheet->setCellValueExplicit("B{$row}", $item->sens_warna === 'oke' ? '✔' : '✘', \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+		$row++;
+
+		if (!empty($item->catatan)) {
+			$sheet->setCellValue("A{$row}", 'Catatan');
+			$sheet->setCellValue("B{$row}", $item->catatan);
+			$row++;
+		}
+
+		$row += 2;
+	}
+
+    // Tanda Tangan
+	$sheet->setCellValue("B{$row}", 'Dibuat Oleh');
+	$sheet->setCellValue("E{$row}", 'Diketahui Oleh');
+	$sheet->setCellValue("H{$row}", 'Disetujui Oleh');
+	$row += 3;
+	$sheet->setCellValue("B{$row}", $qc ?: '-');
+	$sheet->setCellValue("E{$row}", $produksi ?: '-');
+	$sheet->setCellValue("H{$row}", $spv ?: '-');
+	$row++;
+	$sheet->setCellValue("B{$row}", 'QC Inspector');
+	$sheet->setCellValue("E{$row}", 'Foreman Produksi');
+	$sheet->setCellValue("H{$row}", 'Supervisor QC');
 
     // Border dan Wrap
-		$sheet->getStyle("A6:J{$row}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-		$sheet->getStyle("A6:J{$row}")->getAlignment()->setWrapText(true);
+	$sheet->getStyle("A6:J{$row}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+	$sheet->getStyle("A6:J{$row}")->getAlignment()->setWrapText(true);
 
     // Output Excel
-		$filename = 'Verifikasi_Produksi_' . date('Ymd_His') . '.xlsx';
+	$filename = 'Verifikasi_Produksi_' . date('Ymd_His') . '.xlsx';
 
-		if (ob_get_length()) ob_end_clean();
-		ob_start();
+	if (ob_get_length()) ob_end_clean();
+	ob_start();
 
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header("Content-Disposition: attachment; filename=\"$filename\"");
-		header('Cache-Control: max-age=0');
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header("Content-Disposition: attachment; filename=\"$filename\"");
+	header('Cache-Control: max-age=0');
 
-		$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-		$writer->save('php://output');
-		exit;
-	}
+	$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+	$writer->save('php://output');
+	exit;
+}
 
 
 }
