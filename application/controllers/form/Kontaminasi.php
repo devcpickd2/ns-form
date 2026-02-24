@@ -54,37 +54,61 @@ class Kontaminasi extends CI_Controller {
 		return true; 
 	}
 
-	public function tambah()
+public function tambah()
 	{
 		$rules = $this->kontaminasi_model->rules();
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
+
 			$config = array(
 				'upload_path'   => "./uploads/",
-				'allowed_types' => "jpg|png|jpeg|pdf", 
+				'allowed_types' => "jpg|png|jpeg|pdf",
 				'overwrite'     => TRUE,
-				'max_size'      => 2048000, 
+				'max_size'      => 2048, 
 				'encrypt_name'  => TRUE
 			);
+
+			$this->load->library('upload', $config);
 			$this->upload->initialize($config);
+
 			if (!$this->upload->do_upload('bukti')) {
+
 				$error = $this->upload->display_errors();
 				$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 				redirect('kontaminasi/tambah');
+
 			} else {
+
 				$data = $this->upload->data();
 				$file_name = $data['file_name'];
+
+            // 🔥 Kompres jika file gambar
+				if (in_array($data['file_ext'], ['.jpg', '.jpeg', '.png'])) {
+
+					$config['image_library']  = 'gd2';
+					$config['source_image']   = './uploads/' . $file_name;
+					$config['maintain_ratio'] = TRUE;
+					$config['quality']        = '70%'; 
+					$config['width']         = 800; 
+					$config['height']        = 800; 
+
+					$this->load->library('image_lib', $config);
+					$this->image_lib->initialize($config);
+
+					$this->image_lib->resize(); 
+					$this->image_lib->clear();
+				}
 
 				$update = $this->kontaminasi_model->insert($file_name);
 
 				if ($update) {
-					$this->session->set_flashdata('success_msg', 'Data Kontaminasi Benda Asing berhasil disimpan');
-					redirect('kontaminasi');
+					$this->session->set_flashdata('success_msg', 'Data Kontaminasi berhasil disimpan');
 				} else {
-					$this->session->set_flashdata('error_msg', 'Data Kontaminasi Benda Asing gagal disimpan');
-					redirect('kontaminasi');
+					$this->session->set_flashdata('error_msg', 'Data Kontaminasi gagal disimpan');
 				}
+
+				redirect('kontaminasi');
 			}
 		}
 
@@ -98,6 +122,7 @@ class Kontaminasi extends CI_Controller {
 		$this->load->view('partials/footer');
 	}
 
+
 	public function edit($uuid)
 	{
 		$kontaminasi = $this->kontaminasi_model->get_by_uuid($uuid);
@@ -105,57 +130,85 @@ class Kontaminasi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
+
 			$config = array(
-				'upload_path' => "./uploads/",
+				'upload_path'   => "./uploads/",
 				'allowed_types' => "jpg|png|jpeg|pdf",
-				'overwrite' => FALSE,
-				'max_size' => "2048000",
-				'encrypt_name' => TRUE
+				'overwrite'     => FALSE,
+				'max_size'      => 2048,
+				'encrypt_name'  => TRUE
 			);
 
-			$this->load->library('upload', $config);
+			$this->load->library('upload');
 			$this->upload->initialize($config);
 
-		// Inisialisasi variabel file_name
-			$file_name = $kontaminasi->bukti;
+        // Default pakai file lama
+			$file_name = $kontaminasi->bukti; 
 
+        // Jika ada file baru diupload
 			if (!empty($_FILES['bukti']['name'])) {
+
 				if (!$this->upload->do_upload('bukti')) {
+
 					$error = $this->upload->display_errors();
 					$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 					redirect('kontaminasi/edit/' . $uuid);
+
 				} else {
+
 					$data = $this->upload->data();
 					$file_name = $data['file_name'];
 
-				// Hapus file lama jika ada
+					if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
+
+						$config_img = array(
+							'image_library'  => 'gd2',
+							'source_image'   => './uploads/' . $file_name,
+							'maintain_ratio' => TRUE,
+							'quality'        => '70%',
+							'width'          => 800,
+							'height'         => 800
+						);
+
+						$this->load->library('image_lib');
+						$this->image_lib->initialize($config_img);
+
+						if (!$this->image_lib->resize()) {
+							echo $this->image_lib->display_errors();
+						}
+
+						$this->image_lib->clear();
+					}
+
+                // 🔥 Hapus file lama jika ada
 					if (!empty($kontaminasi->bukti) && file_exists('./uploads/' . $kontaminasi->bukti)) {
 						unlink('./uploads/' . $kontaminasi->bukti);
 					}
 				}
 			}
 
-		// Update ke database lewat model
+        // Update database
 			$update = $this->kontaminasi_model->update($uuid, $file_name);
 
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kontaminasi berhasil diupdate');
-				redirect('kontaminasi');
 			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kontaminasi gagal diupdate');
-				redirect('kontaminasi');
 			}
+
+			redirect('kontaminasi');
 		}
 
 		$data = array(
 			'kontaminasi' => $kontaminasi,
-			'active_nav' => 'kontaminasi'
+			'active_nav'  => 'kontaminasi'
 		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kontaminasi/kontaminasi-edit', $data);
 		$this->load->view('partials/footer');
 	}
+
 
 	public function delete($uuid)
 	{
