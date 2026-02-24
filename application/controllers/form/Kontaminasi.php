@@ -122,7 +122,6 @@ public function tambah()
 		$this->load->view('partials/footer');
 	}
 
-
 	public function edit($uuid)
 	{
 		$kontaminasi = $this->kontaminasi_model->get_by_uuid($uuid);
