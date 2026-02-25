@@ -147,47 +147,78 @@ class Produksi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
+
 			$config = array(
-				'upload_path' => "./uploads/packing/",
-				'allowed_types' => "jpg|png|jpeg|pdf",
-				'overwrite' => FALSE,
-				'max_size' => "2048000",
-				'encrypt_name' => TRUE
+				'upload_path'   => "./uploads/packing/",
+				'allowed_types' => "jpg|jpeg|png|pdf",
+				'overwrite'     => FALSE,
+				'max_size'      => 2048,
+				'encrypt_name'  => TRUE
 			);
 
-			$this->load->library('upload', $config);
+			$this->load->library('upload');
 			$this->upload->initialize($config);
 
+        // Default pakai file lama
 			$file_name = $produksi->labelisasi_karton;
 
+        // Jika ada file baru diupload
 			if (!empty($_FILES['labelisasi_karton']['name'])) {
+
 				if (!$this->upload->do_upload('labelisasi_karton')) {
+
 					$error = $this->upload->display_errors();
 					$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 					redirect('produksi/packing/' . $uuid);
+
 				} else {
+
 					$data = $this->upload->data();
 					$file_name = $data['file_name'];
 
+                // 🔥 Kompres jika gambar
+					if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
+
+						$config_img = array(
+							'image_library'  => 'gd2',
+							'source_image'   => './uploads/packing/' . $file_name,
+							'maintain_ratio' => TRUE,
+							'quality'        => '70%',
+							'width'          => 800,
+							'height'         => 800
+						);
+
+						$this->load->library('image_lib');
+						$this->image_lib->initialize($config_img);
+
+						if (!$this->image_lib->resize()) {
+							echo $this->image_lib->display_errors();
+						}
+
+						$this->image_lib->clear();
+					}
+
+                // 🔥 Hapus file lama jika ada
 					if (!empty($produksi->labelisasi_karton) && file_exists('./uploads/packing/' . $produksi->labelisasi_karton)) {
 						unlink('./uploads/packing/' . $produksi->labelisasi_karton);
 					}
 				}
 			}
 
+        // Update database
 			$update = $this->produksi_model->pack($uuid, $file_name);
 
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Verifikasi Pengemasan Produk berhasil diupdate');
-				redirect('produksi');
 			} else {
 				$this->session->set_flashdata('error_msg', 'Data Verifikasi Pengemasan Produk gagal diupdate');
-				redirect('produksi');
 			}
+
+			redirect('produksi');
 		}
 
 		$data = array(
-			'produksi' => $produksi,
+			'produksi'   => $produksi,
 			'active_nav' => 'produksi'
 		);
 

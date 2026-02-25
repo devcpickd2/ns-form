@@ -64,37 +64,66 @@ class Sanitasi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
+
 			$config = array(
 				'upload_path'   => "./uploads/",
-				'allowed_types' => "jpg|png|jpeg|pdf", 
+				'allowed_types' => "jpg|jpeg|png|pdf",
 				'overwrite'     => TRUE,
-				'max_size'      => 2048000, 
+				'max_size'      => 2048, 
 				'encrypt_name'  => TRUE
 			);
+
+			$this->load->library('upload');
 			$this->upload->initialize($config);
+
 			if (!$this->upload->do_upload('hand_basin')) {
+
 				$error = $this->upload->display_errors();
 				$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 				redirect('sanitasi/tambah');
+
 			} else {
+
 				$data = $this->upload->data();
 				$file_name = $data['file_name'];
 
-				$update = $this->sanitasi_model->insert($file_name);
+            // 🔥 Kompres jika gambar
+				if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
 
-				if ($update) {
+					$config_img = array(
+						'image_library'  => 'gd2',
+						'source_image'   => './uploads/' . $file_name,
+						'maintain_ratio' => TRUE,
+						'quality'        => '70%',
+						'width'          => 800,
+						'height'         => 800
+					);
+
+					$this->load->library('image_lib');
+					$this->image_lib->initialize($config_img);
+
+					if (!$this->image_lib->resize()) {
+						echo $this->image_lib->display_errors();
+					}
+
+					$this->image_lib->clear();
+				}
+
+				$insert = $this->sanitasi_model->insert($file_name);
+
+				if ($insert) {
 					$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Sanitasi berhasil disimpan');
-					redirect('sanitasi');
 				} else {
 					$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Sanitasi gagal disimpan');
-					redirect('sanitasi');
 				}
+
+				redirect('sanitasi');
 			}
 		}
 
 		$data = array(
-			'sanitasi' => $this->sanitasi_model->get_data_by_plant(),
-			'active_nav'  => 'sanitasi'
+			'sanitasi'   => $this->sanitasi_model->get_data_by_plant(),
+			'active_nav' => 'sanitasi'
 		);
 
 		$this->load->view('partials/head', $data);
@@ -109,50 +138,77 @@ class Sanitasi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
+
 			$config = array(
-				'upload_path' => "./uploads/",
-				'allowed_types' => "jpg|png|jpeg|pdf",
-				'overwrite' => FALSE,
-				'max_size' => "2048000",
-				'encrypt_name' => TRUE
+				'upload_path'   => "./uploads/",
+				'allowed_types' => "jpg|jpeg|png|pdf",
+				'overwrite'     => FALSE,
+				'max_size'      => 2048, 
+				'encrypt_name'  => TRUE
 			);
 
-			$this->load->library('upload', $config);
+			$this->load->library('upload');
 			$this->upload->initialize($config);
 
-		// Inisialisasi variabel file_name
+        // Default pakai file lama
 			$file_name = $sanitasi->hand_basin;
 
+        // Jika ada file baru diupload
 			if (!empty($_FILES['hand_basin']['name'])) {
+
 				if (!$this->upload->do_upload('hand_basin')) {
+
 					$error = $this->upload->display_errors();
 					$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 					redirect('sanitasi/edit/' . $uuid);
+
 				} else {
+
 					$data = $this->upload->data();
 					$file_name = $data['file_name'];
 
-				// Hapus file lama jika ada
+                // 🔥 Kompres jika gambar
+					if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
+
+						$config_img = array(
+							'image_library'  => 'gd2',
+							'source_image'   => './uploads/' . $file_name,
+							'maintain_ratio' => TRUE,
+							'quality'        => '70%',
+							'width'          => 800,
+							'height'         => 800
+						);
+
+						$this->load->library('image_lib');
+						$this->image_lib->initialize($config_img);
+
+						if (!$this->image_lib->resize()) {
+							echo $this->image_lib->display_errors();
+						}
+
+						$this->image_lib->clear();
+					}
+
+                // 🔥 Hapus file lama
 					if (!empty($sanitasi->hand_basin) && file_exists('./uploads/' . $sanitasi->hand_basin)) {
 						unlink('./uploads/' . $sanitasi->hand_basin);
 					}
 				}
 			}
 
-		// Update ke database lewat model
 			$update = $this->sanitasi_model->update($uuid, $file_name);
 
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Sanitasi berhasil diupdate');
-				redirect('sanitasi');
 			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Sanitasi gagal diupdate');
-				redirect('sanitasi');
 			}
+
+			redirect('sanitasi');
 		}
 
 		$data = array(
-			'sanitasi' => $sanitasi,
+			'sanitasi'   => $sanitasi,
 			'active_nav' => 'sanitasi'
 		);
 
