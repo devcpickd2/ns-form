@@ -1,20 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Metal extends CI_Controller {
+class Metal extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('metal_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -23,7 +26,7 @@ class Metal extends CI_Controller {
 	{
 		$data = array(
 			'metal' => $this->metal_model->get_data_by_plant(),
-			'active_nav' => 'metal', 
+			'active_nav' => 'metal',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -35,7 +38,8 @@ class Metal extends CI_Controller {
 	{
 		$data = array(
 			'metal' => $this->metal_model->get_by_uuid($uuid),
-			'active_nav' => 'metal');
+			'active_nav' => 'metal'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/metal/metal-detail', $data);
@@ -53,18 +57,19 @@ class Metal extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Metal Detector berhasil di simpan');
 				redirect('metal');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Metal Detector gagal di simpan');
 				redirect('metal');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'metal');
+			'active_nav' => 'metal'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/metal/metal-tambah');
-		$this->load->view('partials/footer'); 
+		$this->load->view('partials/footer');
 	}
 
 	public function edit($uuid)
@@ -73,12 +78,12 @@ class Metal extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->metal_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Metal Detector berhasil di Update');
 				redirect('metal');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Metal Detector gagal di Update');
 				redirect('metal');
 			}
@@ -86,7 +91,8 @@ class Metal extends CI_Controller {
 
 		$data = array(
 			'metal' => $this->metal_model->get_by_uuid($uuid),
-			'active_nav' => 'metal');
+			'active_nav' => 'metal'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/metal/metal-edit', $data);
@@ -117,7 +123,7 @@ class Metal extends CI_Controller {
 	// 	$this->load->view('form/metal/metal-edit2', $data);
 	// 	$this->load->view('partials/footer');
 	// }
-	
+
 
 	// public function edit3($uuid)
 	// {
@@ -166,7 +172,7 @@ class Metal extends CI_Controller {
 	{
 		$data = array(
 			'metal' => $this->metal_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-metal', 
+			'active_nav' => 'verifikasi-metal',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -186,7 +192,7 @@ class Metal extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Metal Detector berhasil di Update');
 				redirect('metal/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Metal Detector gagal di Update');
 				redirect('metal/verifikasi');
 			}
@@ -194,7 +200,8 @@ class Metal extends CI_Controller {
 
 		$data = array(
 			'metal' => $this->metal_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-metal');
+			'active_nav' => 'verifikasi-metal'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/metal/metal-status', $data);
@@ -205,7 +212,7 @@ class Metal extends CI_Controller {
 	{
 		$data = array(
 			'metal' => $this->metal_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-metal', 
+			'active_nav' => 'diketahui-metal',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -220,12 +227,12 @@ class Metal extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->metal_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Metal Detector berhasil di Update');
 				redirect('metal/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Metal Detector gagal di Update');
 				redirect('metal/diketahui');
 			}
@@ -233,7 +240,8 @@ class Metal extends CI_Controller {
 
 		$data = array(
 			'metal' => $this->metal_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-metal');
+			'active_nav' => 'diketahui-metal'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/metal/metal-statusprod', $data);
@@ -242,7 +250,7 @@ class Metal extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -252,12 +260,12 @@ class Metal extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$metal_data = $this->metal_model->get_by_date($tanggal, $plant); 
-		$metal_data_verif = $this->metal_model->get_last_verif_by_date($tanggal, $plant); 
+		$metal_data = $this->metal_model->get_by_date($tanggal, $plant);
+		$metal_data_verif = $this->metal_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$metal_data || !$metal_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('metal/verifikasi'); 
+			redirect('metal/verifikasi');
 		}
 
 		$data['metal'] = $metal_data_verif;
@@ -270,7 +278,7 @@ class Metal extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 10, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -289,8 +297,8 @@ class Metal extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['metal']->date_metal;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -345,11 +353,11 @@ class Metal extends CI_Controller {
 			$formattedTime = date('H:i', strtotime($metal->time));
 
 			$pdf->Cell(14, 5, $formattedTime, 1, 0, 'C');
-			$pdf->Cell(58, 5, $metal->nama_produk.' - '. $metal->kode_produksi, 1, 0, 'L');
+			$pdf->Cell(58, 5, $metal->nama_produk . ' - ' . $metal->kode_produksi, 1, 0, 'L');
 			$pdf->Cell(12, 5, $metal->no_program, 1, 0, 'C');
 			// $pdf->Cell(12, 5, $metal->deteksi_ng, 1, 0, 'C');
 
-			$pdf->SetFont('dejavusans', '', 8);	
+			$pdf->SetFont('dejavusans', '', 8);
 			$pdf->Cell(6, 5, ($metal->fe_d === null || $metal->fe_d === '') ? '-' : (($metal->fe_d == 'terdeteksi') ? '✔' : '✘'), 1, 0, 'C');
 			$pdf->Cell(7, 5, ($metal->nonfe_d === null || $metal->nonfe_d === '') ? '-' : (($metal->nonfe_d == 'terdeteksi') ? '✔' : '✘'), 1, 0, 'C');
 			$pdf->Cell(7, 5, ($metal->sus_d === null || $metal->sus_d === '') ? '-' : (($metal->sus_d == 'terdeteksi') ? '✔' : '✘'), 1, 0, 'C');
@@ -367,9 +375,9 @@ class Metal extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 08/00', 0, 1, 'R'); 
-		
-		$pdf->SetY($pdf->GetY() + 3); 
+		$pdf->Cell(190, 5, 'QN 08/00', 0, 1, 'R');
+
+		$pdf->SetY($pdf->GetY() + 3);
 		$pdf->SetFont('dejavusans', '', 5);
 
 		// $col1 = "1. Belt Conveyor Berhenti\n2. Rejector";
@@ -386,12 +394,12 @@ class Metal extends CI_Controller {
 		$pdf->SetXY($startX + 2 * $colWidth, $startY);
 		$pdf->MultiCell($colWidth, 4, $col3, 0, 'L', false);
 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($metal_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -480,38 +488,38 @@ class Metal extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['metal']->nama_lengkap_produksi) && !empty($data['metal']->tgl_update_produksi_metal)) {
 			$prod_tanggal = (new DateTime($data['metal']->tgl_update_produksi_metal ?? $data['metal']->tgl_update_produksi_metal))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['metal']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['metal']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['metal']->tgl_update_spv)
-		? (new DateTime($data['metal']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['metal']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['metal']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['metal']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -521,7 +529,7 @@ class Metal extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -544,7 +552,5 @@ class Metal extends CI_Controller {
 		$pdf->setPrintFooter(false);
 		$filename = "Metal Detector_{$formatted_date2}.pdf";
 		$pdf->Output($filename, 'I');
-
 	}
 }
-
