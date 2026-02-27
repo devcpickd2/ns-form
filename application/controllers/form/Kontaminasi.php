@@ -1,26 +1,27 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kontaminasi extends CI_Controller {
+class Kontaminasi extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model');  
+		$this->load->model('auth_model');
 		$this->load->model('kontaminasi_model');
 		$this->load->library('upload');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
 
-	public function index() 
+	public function index()
 	{
 		$data = array(
 			'kontaminasi' => $this->kontaminasi_model->get_data_by_plant(),
-			'active_nav' => 'kontaminasi', 
+			'active_nav' => 'kontaminasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -32,7 +33,8 @@ class Kontaminasi extends CI_Controller {
 	{
 		$data = array(
 			'kontaminasi' => $this->kontaminasi_model->get_by_uuid($uuid),
-			'active_nav' => 'kontaminasi');
+			'active_nav' => 'kontaminasi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kontaminasi/kontaminasi-detail', $data);
@@ -51,10 +53,10 @@ class Kontaminasi extends CI_Controller {
 			}
 		}
 
-		return true; 
+		return true;
 	}
 
-public function tambah()
+	public function tambah()
 	{
 		$rules = $this->kontaminasi_model->rules();
 		$this->form_validation->set_rules($rules);
@@ -65,7 +67,7 @@ public function tambah()
 				'upload_path'   => "./uploads/",
 				'allowed_types' => "jpg|png|jpeg|pdf",
 				'overwrite'     => TRUE,
-				'max_size'      => 2048, 
+				'max_size'      => 2048,
 				'encrypt_name'  => TRUE
 			);
 
@@ -77,26 +79,25 @@ public function tambah()
 				$error = $this->upload->display_errors();
 				$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 				redirect('kontaminasi/tambah');
-
 			} else {
 
 				$data = $this->upload->data();
 				$file_name = $data['file_name'];
 
-            // 🔥 Kompres jika file gambar
+				// 🔥 Kompres jika file gambar
 				if (in_array($data['file_ext'], ['.jpg', '.jpeg', '.png'])) {
 
 					$config['image_library']  = 'gd2';
 					$config['source_image']   = './uploads/' . $file_name;
 					$config['maintain_ratio'] = TRUE;
-					$config['quality']        = '70%'; 
-					$config['width']         = 800; 
-					$config['height']        = 800; 
+					$config['quality']        = '70%';
+					$config['width']         = 800;
+					$config['height']        = 800;
 
 					$this->load->library('image_lib', $config);
 					$this->image_lib->initialize($config);
 
-					$this->image_lib->resize(); 
+					$this->image_lib->resize();
 					$this->image_lib->clear();
 				}
 
@@ -141,10 +142,10 @@ public function tambah()
 			$this->load->library('upload');
 			$this->upload->initialize($config);
 
-        // Default pakai file lama
-			$file_name = $kontaminasi->bukti; 
+			// Default pakai file lama
+			$file_name = $kontaminasi->bukti;
 
-        // Jika ada file baru diupload
+			// Jika ada file baru diupload
 			if (!empty($_FILES['bukti']['name'])) {
 
 				if (!$this->upload->do_upload('bukti')) {
@@ -152,7 +153,6 @@ public function tambah()
 					$error = $this->upload->display_errors();
 					$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 					redirect('kontaminasi/edit/' . $uuid);
-
 				} else {
 
 					$data = $this->upload->data();
@@ -179,14 +179,14 @@ public function tambah()
 						$this->image_lib->clear();
 					}
 
-                // 🔥 Hapus file lama jika ada
+					// 🔥 Hapus file lama jika ada
 					if (!empty($kontaminasi->bukti) && file_exists('./uploads/' . $kontaminasi->bukti)) {
 						unlink('./uploads/' . $kontaminasi->bukti);
 					}
 				}
 			}
 
-        // Update database
+			// Update database
 			$update = $this->kontaminasi_model->update($uuid, $file_name);
 
 			if ($update) {
@@ -231,7 +231,7 @@ public function tambah()
 	{
 		$data = array(
 			'kontaminasi' => $this->kontaminasi_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-kontaminasi', 
+			'active_nav' => 'verifikasi-kontaminasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -269,7 +269,7 @@ public function tambah()
 	{
 		$data = array(
 			'kontaminasi' => $this->kontaminasi_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-kontaminasi', 
+			'active_nav' => 'diketahui-kontaminasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -306,7 +306,7 @@ public function tambah()
 	public function cetak()
 	{
 		ob_start();
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -316,12 +316,12 @@ public function tambah()
 
 		$plant = $this->session->userdata('plant');
 
-		$kontaminasi_data = $this->kontaminasi_model->get_by_date($tanggal, $plant); 
-		$kontaminasi_data_verif = $this->kontaminasi_model->get_last_verif_by_date($tanggal, $plant); 
+		$kontaminasi_data = $this->kontaminasi_model->get_by_date($tanggal, $plant);
+		$kontaminasi_data_verif = $this->kontaminasi_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$kontaminasi_data || !$kontaminasi_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('kontaminasi/verifikasi'); 
+			redirect('kontaminasi/verifikasi');
 		}
 
 		$data['kontaminasi'] = $kontaminasi_data_verif;
@@ -333,7 +333,7 @@ public function tambah()
 
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 9.5, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -346,8 +346,8 @@ public function tambah()
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['kontaminasi']->date;
 		$datetime = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $datetime->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $datetime->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->Write(9, "\n");
 		$pdf->MultiCell(0, 5, 'KONTAMINASI BENDA ASING', 0, 'C');
@@ -360,7 +360,7 @@ public function tambah()
 		$pdf->Write(0, 'Shift: ' . $data['kontaminasi']->shift);
 		$pdf->Ln(5);
 
-		$pdf->SetFont('times', '', 9); 
+		$pdf->SetFont('times', '', 9);
 		$pdf->Cell(10, 10, 'Pukul', 1, 0, 'C');
 		$pdf->Cell(30, 10, 'Jenis Kontaminasi', 1, 0, 'C');
 		$pdf->Cell(30, 10, 'Bukti', 1, 0, 'C');
@@ -380,8 +380,8 @@ public function tambah()
 			$pdf->Cell(30, 20, $kontaminasi->jenis_kontaminasi, 1, 0, 'L');
 			$colWidth = 30;
 			$colHeight = 20;
-			$maxWidthImage = 25;  
-			$maxHeightImage = 15; 
+			$maxWidthImage = 25;
+			$maxHeightImage = 15;
 			$image_path = FCPATH . 'uploads/' . $kontaminasi->bukti;
 			$pdf->Rect($pdf->GetX(), $pdf->GetY(), $colWidth, $colHeight);
 
@@ -394,21 +394,21 @@ public function tambah()
 						$newHeight = $newWidth / $aspectRatio;
 					} else {
 						$newHeight = $maxHeightImage;
-						$newWidth = $newHeight * $aspectRatio; 
+						$newWidth = $newHeight * $aspectRatio;
 					}
 				} else {
 					$newWidth = $width;
 					$newHeight = $height;
 				}
-				$xPos = $pdf->GetX() + ($colWidth - $newWidth) / 2; 
-				$yPos = $pdf->GetY() + ($colHeight - $newHeight) / 2; 
+				$xPos = $pdf->GetX() + ($colWidth - $newWidth) / 2;
+				$yPos = $pdf->GetY() + ($colHeight - $newHeight) / 2;
 				$pdf->Image($image_path, $xPos, $yPos, $newWidth, $newHeight);
 				$pdf->SetX($pdf->GetX() + $colWidth);
 			} else {
 				$pdf->Cell($colWidth, $colHeight, 'Gambar Tidak Ada', 1, 0, 'C');
 				$pdf->SetX($pdf->GetX() + $colWidth);
 			}
-			$pdf->Cell(45, 20, $kontaminasi->nama_produk. ' / ' . $kontaminasi->kode_produksi, 1, 0, 'C');
+			$pdf->Cell(45, 20, $kontaminasi->nama_produk . ' / ' . $kontaminasi->kode_produksi, 1, 0, 'C');
 			$pdf->Cell(30, 20, $kontaminasi->tahapan, 1, 0, 'C');
 			$pdf->Cell(26, 20, !empty($kontaminasi->keterangan) ? $kontaminasi->keterangan : '-', 1, 0, 'C');
 			$pdf->Cell(12, 20, $kontaminasi->username, 1, 0, 'C');
@@ -417,14 +417,14 @@ public function tambah()
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 10/00', 0, 1, 'R'); 
+		$pdf->Cell(190, 5, 'QN 10/00', 0, 1, 'R');
 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($kontaminasi_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -512,38 +512,38 @@ public function tambah()
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['kontaminasi']->nama_lengkap_produksi) && !empty($data['kontaminasi']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['kontaminasi']->tgl_update_produksi ?? $data['kontaminasi']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['kontaminasi']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['kontaminasi']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['kontaminasi']->tgl_update_spv)
-		? (new DateTime($data['kontaminasi']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['kontaminasi']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['kontaminasi']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['kontaminasi']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -553,7 +553,7 @@ public function tambah()
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -578,6 +578,4 @@ public function tambah()
 		if (ob_get_length()) ob_end_clean();
 		$pdf->Output($filename, 'I');
 	}
-
 }
-

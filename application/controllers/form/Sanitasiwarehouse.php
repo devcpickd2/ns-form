@@ -1,11 +1,14 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Sanitasiwarehouse extends CI_Controller {
+class Sanitasiwarehouse extends CI_Controller
+{
 
 	public function __construct()
 	{
@@ -13,9 +16,9 @@ class Sanitasiwarehouse extends CI_Controller {
 
 		$this->load->library('form_validation');
 		$this->load->library('session');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('sanitasiwarehouse_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -24,7 +27,7 @@ class Sanitasiwarehouse extends CI_Controller {
 	{
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_data_by_plant(),
-			'active_nav' => 'sanitasiwarehouse', 
+			'active_nav' => 'sanitasiwarehouse',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Sanitasiwarehouse extends CI_Controller {
 	{
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_by_uuid($uuid),
-			'active_nav' => 'sanitasiwarehouse');
+			'active_nav' => 'sanitasiwarehouse'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasiwarehouse/sanitasiwarehouse-detail', $data);
@@ -54,14 +58,15 @@ class Sanitasiwarehouse extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Sanitasi Warehouse berhasil di simpan');
 				redirect('sanitasiwarehouse');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Sanitasi Warehouse gagal di simpan');
 				redirect('sanitasiwarehouse');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'sanitasiwarehouse');
+			'active_nav' => 'sanitasiwarehouse'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasiwarehouse/sanitasiwarehouse-tambah');
@@ -119,7 +124,7 @@ class Sanitasiwarehouse extends CI_Controller {
 	{
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-sanitasiwarehouse', 
+			'active_nav' => 'verifikasi-sanitasiwarehouse',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -139,7 +144,7 @@ class Sanitasiwarehouse extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Sanitasi Warehouse berhasil di Update');
 				redirect('sanitasiwarehouse/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Sanitasi Warehouse gagal di Update');
 				redirect('sanitasiwarehouse/verifikasi');
 			}
@@ -147,7 +152,8 @@ class Sanitasiwarehouse extends CI_Controller {
 
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-sanitasiwarehouse');
+			'active_nav' => 'verifikasi-sanitasiwarehouse'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasiwarehouse/sanitasiwarehouse-status', $data);
@@ -158,7 +164,7 @@ class Sanitasiwarehouse extends CI_Controller {
 	{
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-sanitasiwarehouse', 
+			'active_nav' => 'diketahui-sanitasiwarehouse',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -173,12 +179,12 @@ class Sanitasiwarehouse extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->sanitasiwarehouse_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Sanitasi Warehouse berhasil di Update');
 				redirect('sanitasiwarehouse/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Sanitasi Warehouse gagal di Update');
 				redirect('sanitasiwarehouse/diketahui');
 			}
@@ -186,7 +192,8 @@ class Sanitasiwarehouse extends CI_Controller {
 
 		$data = array(
 			'sanitasiwarehouse' => $this->sanitasiwarehouse_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-sanitasiwarehouse');
+			'active_nav' => 'diketahui-sanitasiwarehouse'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasiwarehouse/sanitasiwarehouse-statuswh', $data);
@@ -195,7 +202,7 @@ class Sanitasiwarehouse extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -205,12 +212,12 @@ class Sanitasiwarehouse extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$sanitasiwarehouse_data = $this->sanitasiwarehouse_model->get_by_date($tanggal, $plant); 
-		$sanitasiwarehouse_data_verif = $this->sanitasiwarehouse_model->get_last_verif_by_date($tanggal, $plant); 
+		$sanitasiwarehouse_data = $this->sanitasiwarehouse_model->get_by_date($tanggal, $plant);
+		$sanitasiwarehouse_data_verif = $this->sanitasiwarehouse_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$sanitasiwarehouse_data || !$sanitasiwarehouse_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('sanitasiwarehouse/verifikasi'); 
+			redirect('sanitasiwarehouse/verifikasi');
 		}
 
 		$data['sanitasiwarehouse'] = $sanitasiwarehouse_data_verif;
@@ -223,7 +230,7 @@ class Sanitasiwarehouse extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -242,9 +249,8 @@ class Sanitasiwarehouse extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['sanitasiwarehouse']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -292,7 +298,7 @@ class Sanitasiwarehouse extends CI_Controller {
 
 					if ($kondisi_raw === 'bersih' || $kondisi_raw === '0') {
 						$kondisi1 = '✔';
-					} elseif (in_array($kondisi_raw, ['1','2','3','4','5','6','7'])) {
+					} elseif (in_array($kondisi_raw, ['1', '2', '3', '4', '5', '6', '7'])) {
 						$kondisi2 = $kondisi_raw;
 					}
 
@@ -313,17 +319,17 @@ class Sanitasiwarehouse extends CI_Controller {
 						$pdf->Cell(15, $totalHeight, $sanitasiwarehouse->nama_wh, 1, 0, 'C');
 					}
 
-					$pdf->Ln(); 
+					$pdf->Ln();
 				}
 				$pdf->Cell(195, 0, '', 1, 1, 'C');
 			}
 		}
 
 		$y_last = $pdf->GetY();
-		$y_last += 5; 
+		$y_last += 5;
 
 		$pdf->SetFont('times', '', 7);
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->SetY($pdf->GetY() + 2);
 
 		$pdf->MultiCell(0, 3, "V Bersih\n1. Berdebu\n2. Basah\n3. Sampah (sisa lakban, kertas, remah produk/bahan baku, plastik, kardus bekas\n4. Pertumbuhan mikroorganisme (jamur dan bau busuk)\n5. Pallet rusak/pecah\n6. Terdapat aktifitas binatang (tikus, kecoa, lalat, ulat, belatung)\n7. Sarang laba-laba", 0, 'L');
 
@@ -347,7 +353,7 @@ class Sanitasiwarehouse extends CI_Controller {
 			$pdf->SetXY(25, $y_verifikasi + 10);
 			$pdf->SetFont('times', 'U', 8); // underline
 			$pdf->Cell(35, 5, $data['sanitasiwarehouse']->nama_lengkap_qc, 0, 1, 'C');
-			$pdf->SetFont('times', '', 8); 
+			$pdf->SetFont('times', '', 8);
 			$pdf->Cell(65, 5, 'QC Inspector', 0, 0, 'C');
 
 			$pdf->SetXY(90, $y_verifikasi + 5);
@@ -363,7 +369,6 @@ class Sanitasiwarehouse extends CI_Controller {
 				$pdf->SetFont('times', '', 8);
 				$pdf->SetXY(90, $y_verifikasi + 15);
 				$pdf->Cell(35, 5, 'Warehouse', 0, 0, 'C');
-
 			} else {
 				$pdf->SetXY(90, $y_verifikasi + 10);
 				$pdf->Cell(35, 5, 'Belum Diverifikasi', 0, 0, 'C');
@@ -377,7 +382,7 @@ class Sanitasiwarehouse extends CI_Controller {
 			$pdf->SetXY(150, $y_verifikasi + 24);
 			$pdf->Cell(49, 5, 'Supervisor QC', 0, 0, 'C');
 		} else {
-			$pdf->SetTextColor(255, 0, 0); 
+			$pdf->SetTextColor(255, 0, 0);
 			$pdf->SetFont('times', '', 8);
 			$pdf->SetXY(100, $y_after_keterangan);
 			$pdf->Cell(80, 5, 'Data Belum Diverifikasi', 0, 0, 'C');
@@ -388,4 +393,3 @@ class Sanitasiwarehouse extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

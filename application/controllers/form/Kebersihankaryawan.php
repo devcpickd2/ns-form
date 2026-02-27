@@ -1,20 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Kebersihankaryawan extends CI_Controller {
+class Kebersihankaryawan extends CI_Controller
+{
 
-	public function __construct() 
+	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('kebersihankaryawan_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -23,7 +26,7 @@ class Kebersihankaryawan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_data_by_plant(),
-			'active_nav' => 'kebersihankaryawan', 
+			'active_nav' => 'kebersihankaryawan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -35,7 +38,8 @@ class Kebersihankaryawan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_by_uuid($uuid),
-			'active_nav' => 'kebersihankaryawan');
+			'active_nav' => 'kebersihankaryawan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihankaryawan/kebersihankaryawan-detail', $data);
@@ -53,14 +57,15 @@ class Kebersihankaryawan extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Karyawan berhasil di simpan');
 				redirect('kebersihankaryawan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Karyawan gagal di simpan');
 				redirect('kebersihankaryawan');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'kebersihankaryawan');
+			'active_nav' => 'kebersihankaryawan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihankaryawan/kebersihankaryawan-tambah');
@@ -74,12 +79,12 @@ class Kebersihankaryawan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->kebersihankaryawan_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Karyawan berhasil di Update');
 				redirect('kebersihankaryawan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Karyawan gagal di Update');
 				redirect('kebersihankaryawan');
 			}
@@ -87,7 +92,8 @@ class Kebersihankaryawan extends CI_Controller {
 
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_by_uuid($uuid),
-			'active_nav' => 'kebersihankaryawan');
+			'active_nav' => 'kebersihankaryawan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihankaryawan/kebersihankaryawan-edit', $data);
@@ -111,13 +117,13 @@ class Kebersihankaryawan extends CI_Controller {
 
 		redirect('kebersihankaryawan');
 	}
-	
-	
+
+
 	public function verifikasi()
 	{
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-kebersihankaryawan', 
+			'active_nav' => 'verifikasi-kebersihankaryawan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -137,7 +143,7 @@ class Kebersihankaryawan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Karyawan berhasil di Update');
 				redirect('kebersihankaryawan/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Karyawan gagal di Update');
 				redirect('kebersihankaryawan/verifikasi');
 			}
@@ -145,7 +151,8 @@ class Kebersihankaryawan extends CI_Controller {
 
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-kebersihankaryawan');
+			'active_nav' => 'verifikasi-kebersihankaryawan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihankaryawan/kebersihankaryawan-status', $data);
@@ -156,7 +163,7 @@ class Kebersihankaryawan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-kebersihankaryawan', 
+			'active_nav' => 'diketahui-kebersihankaryawan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -171,12 +178,12 @@ class Kebersihankaryawan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->kebersihankaryawan_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Kebersihan Karyawan berhasil di Update');
 				redirect('kebersihankaryawan/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Kebersihan Karyawan gagal di Update');
 				redirect('kebersihankaryawan/diketahui');
 			}
@@ -184,7 +191,8 @@ class Kebersihankaryawan extends CI_Controller {
 
 		$data = array(
 			'kebersihankaryawan' => $this->kebersihankaryawan_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-kebersihankaryawan');
+			'active_nav' => 'diketahui-kebersihankaryawan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihankaryawan/kebersihankaryawan-statusprod', $data);
@@ -193,7 +201,7 @@ class Kebersihankaryawan extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -203,8 +211,8 @@ class Kebersihankaryawan extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$kebersihankaryawan_data = $this->kebersihankaryawan_model->get_by_date($tanggal, $plant); 
-		$kebersihankaryawan_data_verif = $this->kebersihankaryawan_model->get_last_verif_by_date($tanggal, $plant); 
+		$kebersihankaryawan_data = $this->kebersihankaryawan_model->get_by_date($tanggal, $plant);
+		$kebersihankaryawan_data_verif = $this->kebersihankaryawan_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$kebersihankaryawan_data || !$kebersihankaryawan_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
@@ -221,7 +229,7 @@ class Kebersihankaryawan extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 10);
@@ -240,8 +248,8 @@ class Kebersihankaryawan extends CI_Controller {
 		setlocale(LC_TIME, 'IND');
 		$tanggal = $data['kebersihankaryawan']->date;
 		$datetime = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $datetime->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $datetime->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -277,7 +285,7 @@ class Kebersihankaryawan extends CI_Controller {
 			$pdf->Cell(10, 6, $no, 1, 0, 'C');
 			$pdf->Cell(30, 6, $kebersihankaryawan->nama, 1, 0, 'L');
 			$pdf->Cell(30, 6, $kebersihankaryawan->bagian, 1, 0, 'C');
-			$pdf->SetFont('dejavusans', '', 10);	
+			$pdf->SetFont('dejavusans', '', 10);
 			$pdf->Cell(10, 6, ($kebersihankaryawan->seragam == 'ok') ? '✔' : (($kebersihankaryawan->seragam == 'tidak oke') ? '✘' : '−'), 1, 0, 'C');
 			$pdf->Cell(10, 6, ($kebersihankaryawan->apron == 'ok') ? '✔' : (($kebersihankaryawan->apron == 'tidak oke') ? '✘' : '−'), 1, 0, 'C');
 			$pdf->Cell(10, 6, ($kebersihankaryawan->tangan_kuku == 'ok') ? '✔' : (($kebersihankaryawan->tangan_kuku == 'tidak oke') ? '✘' : '−'), 1, 0, 'C');
@@ -292,11 +300,11 @@ class Kebersihankaryawan extends CI_Controller {
 			$no++;
 		}
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 01/00', 0, 1, 'R'); 
+		$pdf->Cell(190, 5, 'QN 01/00', 0, 1, 'R');
 
 		$nama_spv = $data['kebersihankaryawan']->nama_spv;
 		$tanggal_update = $data['kebersihankaryawan']->tgl_update_spv;
-		$update = new DateTime($tanggal_update); 
+		$update = new DateTime($tanggal_update);
 		$update_tanggal = $update->format('d-m-Y | H:i');
 
 		$status_verifikasi = true;
@@ -304,24 +312,24 @@ class Kebersihankaryawan extends CI_Controller {
 		foreach ($kebersihankaryawan_data as $item) {
 			if ($item->status_spv != '1') {
 				$status_verifikasi = false;
-				break; 
+				break;
 			}
 		}
 
-		$pdf->SetY($pdf->GetY() + 3); 
+		$pdf->SetY($pdf->GetY() + 3);
 		$pdf->SetFont('times', '', 7);
-		$pdf->Cell(10, 3, 'Keterangan : ', 0, 1, 'L'); 
+		$pdf->Cell(10, 3, 'Keterangan : ', 0, 1, 'L');
 		$pdf->Cell(30, 3, '1. Seragam', 0, 0, 'L');
-		$pdf->Cell(30, 3, '4. Kosmetik', 0, 0, 'L'); 
-		$pdf->Cell(40, 3, '7. Topi/Hairnet', 0, 0, 'L'); 
-		$pdf->Cell(30, 3, 'V = OK', 0, 1, 'L'); 
+		$pdf->Cell(30, 3, '4. Kosmetik', 0, 0, 'L');
+		$pdf->Cell(40, 3, '7. Topi/Hairnet', 0, 0, 'L');
+		$pdf->Cell(30, 3, 'V = OK', 0, 1, 'L');
 		$pdf->Cell(30, 3, '2. Apron', 0, 0, 'L');
-		$pdf->Cell(30, 3, '5. Perhiasan', 0, 0, 'L'); 
+		$pdf->Cell(30, 3, '5. Perhiasan', 0, 0, 'L');
 		$pdf->Cell(40, 3, '8. Sepatu Kerja', 0, 0, 'L');
-		$pdf->Cell(30, 3, 'X = Tidak OK', 0, 1, 'L');  
+		$pdf->Cell(30, 3, 'X = Tidak OK', 0, 1, 'L');
 		$pdf->Cell(30, 3, '3. Tangan dan Kuku', 0, 0, 'L');
 		$pdf->Cell(70, 3, '6. Masker', 0, 0, 'L');
-		$pdf->Cell(30, 3, ' -  = Tidak ada atau tidak digunakan', 0, 1, 'L');   
+		$pdf->Cell(30, 3, ' -  = Tidak ada atau tidak digunakan', 0, 1, 'L');
 		$pdf->Ln();
 
 		$this->load->model('pegawai_model');
@@ -329,12 +337,12 @@ class Kebersihankaryawan extends CI_Controller {
 		$data['kebersihankaryawan']->nama_lengkap_spv = $this->pegawai_model->get_nama_lengkap($data['kebersihankaryawan']->nama_spv);
 		$data['kebersihankaryawan']->nama_lengkap_produksi = $this->pegawai_model->get_nama_lengkap($data['kebersihankaryawan']->nama_produksi);
 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($kebersihankaryawan_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -422,38 +430,38 @@ class Kebersihankaryawan extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['kebersihankaryawan']->nama_lengkap_produksi) && !empty($data['kebersihankaryawan']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['kebersihankaryawan']->tgl_update_produksi ?? $data['kebersihankaryawan']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['kebersihankaryawan']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['kebersihankaryawan']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['kebersihankaryawan']->tgl_update_spv)
-		? (new DateTime($data['kebersihankaryawan']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['kebersihankaryawan']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['kebersihankaryawan']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['kebersihankaryawan']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -463,7 +471,7 @@ class Kebersihankaryawan extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -488,4 +496,3 @@ class Kebersihankaryawan extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

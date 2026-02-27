@@ -1,20 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Pengemasan extends CI_Controller {
+class Pengemasan extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('pengemasan_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -23,7 +26,7 @@ class Pengemasan extends CI_Controller {
 	{
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_data_by_plant(),
-			'active_nav' => 'pengemasan', 
+			'active_nav' => 'pengemasan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -35,7 +38,8 @@ class Pengemasan extends CI_Controller {
 	{
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_by_uuid($uuid),
-			'active_nav' => 'pengemasan');
+			'active_nav' => 'pengemasan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/pengemasan/pengemasan-detail', $data);
@@ -53,14 +57,15 @@ class Pengemasan extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Proses Pengemasan berhasil di simpan');
 				redirect('pengemasan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Proses Pengemasan gagal di simpan');
 				redirect('pengemasan');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'pengemasan');
+			'active_nav' => 'pengemasan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/pengemasan/pengemasan-tambah');
@@ -74,12 +79,12 @@ class Pengemasan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->pengemasan_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Proses Pengemasan berhasil di Update');
 				redirect('pengemasan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Proses Pengemasan gagal di Update');
 				redirect('pengemasan');
 			}
@@ -87,7 +92,8 @@ class Pengemasan extends CI_Controller {
 
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_by_uuid($uuid),
-			'active_nav' => 'pengemasan');
+			'active_nav' => 'pengemasan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/pengemasan/pengemasan-edit', $data);
@@ -111,12 +117,12 @@ class Pengemasan extends CI_Controller {
 
 		redirect('pengemasan');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-pengemasan', 
+			'active_nav' => 'verifikasi-pengemasan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -136,7 +142,7 @@ class Pengemasan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Proses Pengemasan berhasil di Update');
 				redirect('pengemasan/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Proses Pengemasan gagal di Update');
 				redirect('pengemasan/verifikasi');
 			}
@@ -144,7 +150,8 @@ class Pengemasan extends CI_Controller {
 
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-pengemasan');
+			'active_nav' => 'verifikasi-pengemasan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/pengemasan/pengemasan-status', $data);
@@ -155,7 +162,7 @@ class Pengemasan extends CI_Controller {
 	{
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-pengemasan', 
+			'active_nav' => 'diketahui-pengemasan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -170,12 +177,12 @@ class Pengemasan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->pengemasan_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Proses Pengemasan berhasil di Update');
 				redirect('pengemasan/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Proses Pengemasan gagal di Update');
 				redirect('pengemasan/diketahui');
 			}
@@ -183,7 +190,8 @@ class Pengemasan extends CI_Controller {
 
 		$data = array(
 			'pengemasan' => $this->pengemasan_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-pengemasan');
+			'active_nav' => 'diketahui-pengemasan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/pengemasan/pengemasan-statusprod', $data);
@@ -192,7 +200,7 @@ class Pengemasan extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -202,12 +210,12 @@ class Pengemasan extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$pengemasan_data = $this->pengemasan_model->get_by_date($tanggal, $plant); 
-		$pengemasan_data_verif = $this->pengemasan_model->get_last_verif_by_date($tanggal, $plant); 
+		$pengemasan_data = $this->pengemasan_model->get_by_date($tanggal, $plant);
+		$pengemasan_data_verif = $this->pengemasan_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$pengemasan_data || !$pengemasan_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('pengemasan/verifikasi'); 
+			redirect('pengemasan/verifikasi');
 		}
 
 		$data['pengemasan'] = $pengemasan_data_verif;
@@ -220,8 +228,8 @@ class Pengemasan extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
-		$pdf->SetMargins(17, 16, 15); 
+		$pdf->setPrintHeader(false);
+		$pdf->SetMargins(17, 16, 15);
 		$pdf->AddPage('L', 'LEGAL');
 		$pdf->SetFont('times', 'B', 13);
 
@@ -239,9 +247,8 @@ class Pengemasan extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['pengemasan']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 10);
 		$pdf->SetX(16);
@@ -296,7 +303,7 @@ class Pengemasan extends CI_Controller {
 			$pdf->SetFont('times', '', 10);
 			$pdf->Cell(10, 8, $formatted_time, 1, 0, 'C');
 			$pdf->Cell(30, 8, $pengemasan->nama_produk, 1, 0, 'C');
-			$pdf->Cell(45, 8, $pengemasan->kode_produksi. " / ". $formatted_bb, 1, 0, 'C');
+			$pdf->Cell(45, 8, $pengemasan->kode_produksi . " / " . $formatted_bb, 1, 0, 'C');
 			$pdf->Cell(20, 8, $pengemasan->kondisi_produk, 1, 0, 'C');
 			$pdf->Cell(24, 8, $pengemasan->kondisi_seal, 1, 0, 'C');
 			$pdf->Cell(25, 8, $pengemasan->berat_pack, 1, 0, 'C');
@@ -311,7 +318,7 @@ class Pengemasan extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(320, 5, 'QN 07/00', 0, 1, 'R'); 
+		$pdf->Cell(320, 5, 'QN 07/00', 0, 1, 'R');
 
 		$y_after_keterangan = $pdf->GetY() + 2;
 		$status_verifikasi = true;
@@ -396,38 +403,38 @@ class Pengemasan extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['pengemasan']->nama_lengkap_produksi) && !empty($data['pengemasan']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['pengemasan']->tgl_update_produksi ?? $data['pengemasan']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['pengemasan']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['pengemasan']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['pengemasan']->tgl_update_spv)
-		? (new DateTime($data['pengemasan']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['pengemasan']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['pengemasan']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['pengemasan']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -437,7 +444,7 @@ class Pengemasan extends CI_Controller {
 			$pdf->Cell(130, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(220, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 143, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -455,11 +462,9 @@ class Pengemasan extends CI_Controller {
 			$pdf->Cell(80, 6, 'Data Belum Diverifikasi', 0, 1, 'C');
 			$pdf->SetTextColor(0, 0, 0);
 		}
-		
+
 		$pdf->setPrintFooter(false);
 		$filename = "Pemeriksaan Proses Pengemasan_{$formatted_date2}.pdf";
 		$pdf->Output($filename, 'I');
-
 	}
 }
-

@@ -1,20 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Releasepacking extends CI_Controller {
+class Releasepacking extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('releasepacking_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -23,7 +26,7 @@ class Releasepacking extends CI_Controller {
 	{
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_data_by_plant(),
-			'active_nav' => 'releasepacking', 
+			'active_nav' => 'releasepacking',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -35,7 +38,8 @@ class Releasepacking extends CI_Controller {
 	{
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_by_uuid($uuid),
-			'active_nav' => 'releasepacking');
+			'active_nav' => 'releasepacking'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/releasepacking/releasepacking-detail', $data);
@@ -53,14 +57,15 @@ class Releasepacking extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Release Packing berhasil di simpan');
 				redirect('releasepacking');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Release Packing gagal di simpan');
 				redirect('releasepacking');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'releasepacking');
+			'active_nav' => 'releasepacking'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/releasepacking/releasepacking-tambah');
@@ -74,12 +79,12 @@ class Releasepacking extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->releasepacking_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Release Packing berhasil di Update');
 				redirect('releasepacking');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Release Packing gagal di Update');
 				redirect('releasepacking');
 			}
@@ -87,7 +92,8 @@ class Releasepacking extends CI_Controller {
 
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_by_uuid($uuid),
-			'active_nav' => 'releasepacking');
+			'active_nav' => 'releasepacking'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/releasepacking/releasepacking-edit', $data);
@@ -111,12 +117,12 @@ class Releasepacking extends CI_Controller {
 
 		redirect('releasepacking');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-releasepacking', 
+			'active_nav' => 'verifikasi-releasepacking',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -136,7 +142,7 @@ class Releasepacking extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Release Packing berhasil di Update');
 				redirect('releasepacking/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Release Packing gagal di Update');
 				redirect('releasepacking/verifikasi');
 			}
@@ -144,7 +150,8 @@ class Releasepacking extends CI_Controller {
 
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-releasepacking');
+			'active_nav' => 'verifikasi-releasepacking'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/releasepacking/releasepacking-status', $data);
@@ -155,7 +162,7 @@ class Releasepacking extends CI_Controller {
 	{
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-releasepacking', 
+			'active_nav' => 'diketahui-releasepacking',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -170,12 +177,12 @@ class Releasepacking extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->releasepacking_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Release Packing berhasil di Update');
 				redirect('releasepacking/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Release Packing gagal di Update');
 				redirect('releasepacking/diketahui');
 			}
@@ -183,7 +190,8 @@ class Releasepacking extends CI_Controller {
 
 		$data = array(
 			'releasepacking' => $this->releasepacking_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-releasepacking');
+			'active_nav' => 'diketahui-releasepacking'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/releasepacking/releasepacking-statusprod', $data);
@@ -192,7 +200,7 @@ class Releasepacking extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -202,12 +210,12 @@ class Releasepacking extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$releasepacking_data = $this->releasepacking_model->get_by_date($tanggal, $plant); 
-		$releasepacking_data_verif = $this->releasepacking_model->get_last_verif_by_date($tanggal, $plant); 
+		$releasepacking_data = $this->releasepacking_model->get_by_date($tanggal, $plant);
+		$releasepacking_data_verif = $this->releasepacking_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$releasepacking_data || !$releasepacking_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('releasepacking/verifikasi'); 
+			redirect('releasepacking/verifikasi');
 		}
 
 		$data['releasepacking'] = $releasepacking_data_verif;
@@ -219,8 +227,8 @@ class Releasepacking extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
-		$pdf->SetMargins(17, 16, 15); 
+		$pdf->setPrintHeader(false);
+		$pdf->SetMargins(17, 16, 15);
 		$pdf->AddPage('L', 'LEGAL');
 		$pdf->SetFont('times', 'B', 14);
 
@@ -238,9 +246,8 @@ class Releasepacking extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['releasepacking']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 10);
 		$pdf->SetX(17);
@@ -257,7 +264,7 @@ class Releasepacking extends CI_Controller {
 		$pdf->Cell(60, 12, 'Keterangan', 1, 0, 'C');
 		$pdf->Cell(30, 12, 'QC', 1, 1, 'C');
 
-		foreach ($releasepacking_data as $releasepacking) { 
+		foreach ($releasepacking_data as $releasepacking) {
 			$bb = $releasepacking->best_before;
 			$best_before = new DateTime($bb);
 			$formatted_bb = strftime('%d %B %Y', $best_before->getTimestamp());
@@ -275,7 +282,7 @@ class Releasepacking extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(320, 5, 'QN 19/00', 0, 1, 'R'); 
+		$pdf->Cell(320, 5, 'QN 19/00', 0, 1, 'R');
 
 		$y_after_keterangan = $pdf->GetY() + 2;
 		$status_verifikasi = true;
@@ -341,17 +348,17 @@ class Releasepacking extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		// $qr_produksi_text = null;
 
@@ -366,13 +373,13 @@ class Releasepacking extends CI_Controller {
 		// }
 
 		$spv_tanggal = !empty($data['releasepacking']->tgl_update_spv)
-		? (new DateTime($data['releasepacking']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['releasepacking']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['releasepacking']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['releasepacking']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -382,7 +389,7 @@ class Releasepacking extends CI_Controller {
 			// $pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			// $pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(310, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 55,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 55, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			// if ($qr_produksi_text) {
 			// 	$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			// }
@@ -404,7 +411,5 @@ class Releasepacking extends CI_Controller {
 		$pdf->setPrintFooter(false);
 		$filename = "Data Release Packing_{$formatted_date2}.pdf";
 		$pdf->Output($filename, 'I');
-
 	}
 }
-

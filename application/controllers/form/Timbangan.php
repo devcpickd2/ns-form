@@ -1,20 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Timbangan extends CI_Controller {
+class Timbangan extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('timbangan_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -23,7 +26,7 @@ class Timbangan extends CI_Controller {
 	{
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_data_by_plant(),
-			'active_nav' => 'timbangan', 
+			'active_nav' => 'timbangan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -35,7 +38,8 @@ class Timbangan extends CI_Controller {
 	{
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_by_uuid($uuid),
-			'active_nav' => 'timbangan');
+			'active_nav' => 'timbangan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/timbangan/timbangan-detail', $data);
@@ -53,14 +57,15 @@ class Timbangan extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Timbangan berhasil di simpan');
 				redirect('timbangan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Timbangan gagal di simpan');
 				redirect('timbangan');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'timbangan');
+			'active_nav' => 'timbangan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/timbangan/timbangan-tambah');
@@ -74,12 +79,12 @@ class Timbangan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->timbangan_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Timbangan berhasil di Update');
 				redirect('timbangan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Timbangan gagal di Update');
 				redirect('timbangan');
 			}
@@ -87,7 +92,8 @@ class Timbangan extends CI_Controller {
 
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_by_uuid($uuid),
-			'active_nav' => 'timbangan');
+			'active_nav' => 'timbangan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/timbangan/timbangan-edit', $data);
@@ -111,12 +117,12 @@ class Timbangan extends CI_Controller {
 
 		redirect('timbangan');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-timbangan', 
+			'active_nav' => 'verifikasi-timbangan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -136,7 +142,7 @@ class Timbangan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Timbangan berhasil di Update');
 				redirect('timbangan/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Timbangan gagal di Update');
 				redirect('timbangan/verifikasi');
 			}
@@ -144,7 +150,8 @@ class Timbangan extends CI_Controller {
 
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-timbangan');
+			'active_nav' => 'verifikasi-timbangan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/timbangan/timbangan-status', $data);
@@ -155,7 +162,7 @@ class Timbangan extends CI_Controller {
 	{
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-timbangan', 
+			'active_nav' => 'diketahui-timbangan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -170,12 +177,12 @@ class Timbangan extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->timbangan_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Timbangan berhasil di Update');
 				redirect('timbangan/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Timbangan gagal di Update');
 				redirect('timbangan/diketahui');
 			}
@@ -183,7 +190,8 @@ class Timbangan extends CI_Controller {
 
 		$data = array(
 			'timbangan' => $this->timbangan_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-timbangan');
+			'active_nav' => 'diketahui-timbangan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/timbangan/timbangan-statusprod', $data);
@@ -192,7 +200,7 @@ class Timbangan extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -202,12 +210,12 @@ class Timbangan extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$timbangan_data = $this->timbangan_model->get_by_date($tanggal, $plant); 
-		$timbangan_data_verif = $this->timbangan_model->get_last_verif_by_date($tanggal, $plant); 
+		$timbangan_data = $this->timbangan_model->get_by_date($tanggal, $plant);
+		$timbangan_data_verif = $this->timbangan_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$timbangan_data || !$timbangan_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('timbangan/verifikasi'); 
+			redirect('timbangan/verifikasi');
 		}
 
 		$data['timbangan'] = $timbangan_data_verif;
@@ -220,8 +228,8 @@ class Timbangan extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
-		$pdf->SetMargins(17, 16, 15); 
+		$pdf->setPrintHeader(false);
+		$pdf->SetMargins(17, 16, 15);
 		$pdf->AddPage('L', 'LEGAL');
 		$pdf->SetFont('times', 'B', 15);
 
@@ -239,8 +247,8 @@ class Timbangan extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['timbangan']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 10);
 		$pdf->SetX(16);
@@ -303,7 +311,7 @@ class Timbangan extends CI_Controller {
 			$pdf->Cell(25, 8, $timbangan->lokasi, 1, 0, 'C');
 			$pdf->Cell(25, 8, $timbangan->peneraan_standar, 1, 0, 'C');
 
-			$hasil_array = json_decode($timbangan->peneraan_hasil, true); 
+			$hasil_array = json_decode($timbangan->peneraan_hasil, true);
 			if (!is_array($hasil_array)) {
 				$hasil_array = [];
 			}
@@ -321,13 +329,13 @@ class Timbangan extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(320, 5, 'QN 09/00', 0, 1, 'R'); 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->Cell(320, 5, 'QN 09/00', 0, 1, 'R');
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($timbangan_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -415,38 +423,38 @@ class Timbangan extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['timbangan']->nama_lengkap_produksi) && !empty($data['timbangan']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['timbangan']->tgl_update_produksi ?? $data['timbangan']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['timbangan']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['timbangan']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['timbangan']->tgl_update_spv)
-		? (new DateTime($data['timbangan']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['timbangan']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['timbangan']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['timbangan']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -456,7 +464,7 @@ class Timbangan extends CI_Controller {
 			$pdf->Cell(130, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(220, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 143, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -479,7 +487,5 @@ class Timbangan extends CI_Controller {
 		$pdf->setPrintFooter(false);
 		$filename = "Pemeriksaan Timbangan_{$formatted_date2}.pdf";
 		$pdf->Output($filename, 'I');
-
 	}
 }
-

@@ -1,21 +1,24 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Retain extends CI_Controller {
+class Retain extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('retain_model');
 		$this->load->model('plant_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -24,7 +27,7 @@ class Retain extends CI_Controller {
 	{
 		$data = array(
 			'retain' => $this->retain_model->get_data_by_plant(),
-			'active_nav' => 'retain', 
+			'active_nav' => 'retain',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Retain extends CI_Controller {
 	{
 		$data = array(
 			'retain' => $this->retain_model->get_retain_with_plant($uuid),
-			'active_nav' => 'retain');
+			'active_nav' => 'retain'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/retain/retain-detail', $data);
@@ -54,14 +58,14 @@ class Retain extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Retain Sample Report berhasil di simpan');
 				redirect('retain');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Retain Sample Report gagal di simpan');
 				redirect('retain');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'retain', 
+			'active_nav' => 'retain',
 			'plant' => $this->plant_model->get_all()
 		);
 
@@ -77,12 +81,12 @@ class Retain extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->retain_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Retain Sample Report berhasil di Update');
 				redirect('retain');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Retain Sample Report gagal di Update');
 				redirect('retain');
 			}
@@ -91,7 +95,8 @@ class Retain extends CI_Controller {
 		$data = array(
 			'retain' => $this->retain_model->get_by_uuid($uuid),
 			'plant' => $this->plant_model->get_all(),
-			'active_nav' => 'retain');
+			'active_nav' => 'retain'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/retain/retain-edit', $data);
@@ -115,12 +120,12 @@ class Retain extends CI_Controller {
 
 		redirect('retain');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'retain' => $this->retain_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-retain', 
+			'active_nav' => 'verifikasi-retain',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -140,7 +145,7 @@ class Retain extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Retain Sample Report berhasil di Update');
 				redirect('retain/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Retain Sample Report gagal di Update');
 				redirect('retain/verifikasi');
 			}
@@ -148,7 +153,8 @@ class Retain extends CI_Controller {
 
 		$data = array(
 			'retain' => $this->retain_model->get_retain_with_plant($uuid),
-			'active_nav' => 'verifikasi-retain');
+			'active_nav' => 'verifikasi-retain'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/retain/retain-status', $data);
@@ -159,7 +165,7 @@ class Retain extends CI_Controller {
 	{
 		$data = array(
 			'retain' => $this->retain_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-retain', 
+			'active_nav' => 'diketahui-retain',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -174,12 +180,12 @@ class Retain extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->retain_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Retain Sample Report berhasil di Update');
 				redirect('retain/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Retain Sample Report gagal di Update');
 				redirect('retain/diketahui');
 			}
@@ -187,7 +193,8 @@ class Retain extends CI_Controller {
 
 		$data = array(
 			'retain' => $this->retain_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-retain');
+			'active_nav' => 'diketahui-retain'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/retain/retain-statusprod', $data);
@@ -196,7 +203,7 @@ class Retain extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -206,12 +213,12 @@ class Retain extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$retain_data = $this->retain_model->get_by_date($tanggal, $plant); 
-		$retain_data_verif = $this->retain_model->get_last_verif_by_date($tanggal, $plant); 
+		$retain_data = $this->retain_model->get_by_date($tanggal, $plant);
+		$retain_data_verif = $this->retain_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$retain_data || !$retain_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('retain/verifikasi'); 
+			redirect('retain/verifikasi');
 		}
 
 		$data['retain'] = $retain_data_verif;
@@ -222,7 +229,7 @@ class Retain extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 10, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -242,31 +249,31 @@ class Retain extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['retain']->date;
 		$datetime = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $datetime->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $datetime->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
 
-		$label_width = 35; 
+		$label_width = 35;
 		$value_width = 80;
 
-		$pdf->Cell($label_width, 5, 'Plant', 0, 0); 
-		$pdf->Cell(2, 5, ':', 0, 0); 
+		$pdf->Cell($label_width, 5, 'Plant', 0, 0);
+		$pdf->Cell(2, 5, ':', 0, 0);
 		$pdf->Cell($value_width, 5, $data['retain']->nama_plant, 0, 1);
 
-		$pdf->Cell($label_width, 5, 'Sample Type', 0, 0); 
-		$pdf->Cell(2, 5, ':', 0, 0); 
+		$pdf->Cell($label_width, 5, 'Sample Type', 0, 0);
+		$pdf->Cell(2, 5, ':', 0, 0);
 		$pdf->Cell($value_width, 5, $data['retain']->sample_type, 0, 1);
 
-		$pdf->Cell($label_width, 5, 'Collection Date', 0, 0); 
-		$pdf->Cell(2, 5, ':', 0, 0); 
+		$pdf->Cell($label_width, 5, 'Collection Date', 0, 0);
+		$pdf->Cell(2, 5, ':', 0, 0);
 		$pdf->Cell($value_width, 5, $formatted_date, 0, 1);
 
-		$pdf->Cell($label_width, 5, 'Sample Storage', 0, 0); 
-		$pdf->Cell(2, 5, ':', 0, 0); 
+		$pdf->Cell($label_width, 5, 'Sample Storage', 0, 0);
+		$pdf->Cell(2, 5, ':', 0, 0);
 		$pdf->Cell($value_width, 5, $data['retain']->sample_storage, 0, 1);
-		$pdf->Ln(2); 
+		$pdf->Ln(2);
 		$pdf->SetFont('times', '', 10);
 		$pdf->Cell(12, 10, 'No', 1, 0, 'C');
 		$pdf->Cell(40, 10, 'Description', 1, 0, 'C');
@@ -294,13 +301,13 @@ class Retain extends CI_Controller {
 
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 16/00', 0, 1, 'R'); 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->Cell(190, 5, 'QN 16/00', 0, 1, 'R');
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($retain_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -369,26 +376,26 @@ class Retain extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$spv_tanggal = !empty($data['retain_data']->tgl_update_spv)
-		? (new DateTime($data['retain']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['retain']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['retain']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['retain']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -396,7 +403,7 @@ class Retain extends CI_Controller {
 			$pdf->Cell(45, 5, 'Dibuat Oleh,', 0, 0, 'C');
 			$pdf->SetXY(85, $y_ttd);
 			$pdf->Cell(175, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			$pdf->write2DBarcode($qr_spv_text, 'QRCODE,L', 165, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			$pdf->SetXY(20, $y_ttd + 20);
 			$pdf->Cell(45, 5, 'QC Inspector', 0, 0, 'C');
@@ -416,4 +423,3 @@ class Retain extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

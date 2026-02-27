@@ -1,6 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-require_once(APPPATH . '../vendor/autoload.php'); 
+defined('BASEPATH') or exit('No direct script access allowed');
+require_once(APPPATH . '../vendor/autoload.php');
 // require_once(APPPATH . 'libraries/phpqrcode.php');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -12,21 +12,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Suhu extends CI_Controller {
+class Suhu extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('suhu_model');
 		$this->load->model('pegawai_model');
 		$this->load->helper(['url', 'form']);
 		$this->load->library(['session']);
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -35,7 +37,7 @@ class Suhu extends CI_Controller {
 	{
 		$data = array(
 			'suhu' => $this->suhu_model->get_suhu_by_plant(),
-			'active_nav' => 'suhu', 
+			'active_nav' => 'suhu',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -47,7 +49,8 @@ class Suhu extends CI_Controller {
 	{
 		$data = array(
 			'suhu' => $this->suhu_model->get_by_uuid($uuid),
-			'active_nav' => 'suhu');
+			'active_nav' => 'suhu'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/suhu/suhu-detail', $data);
@@ -65,14 +68,15 @@ class Suhu extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Suhu Ruang berhasil di simpan');
 				redirect('suhu');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Suhu Ruang gagal di simpan');
 				redirect('suhu');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'suhu');
+			'active_nav' => 'suhu'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/suhu/suhu-tambah');
@@ -86,12 +90,12 @@ class Suhu extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->suhu_model->update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Suhu Ruang berhasil di Update');
 				redirect('suhu');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Suhu Ruang gagal di Update');
 				redirect('suhu');
 			}
@@ -99,7 +103,8 @@ class Suhu extends CI_Controller {
 
 		$data = array(
 			'suhu' => $this->suhu_model->get_by_uuid($uuid),
-			'active_nav' => 'suhu');
+			'active_nav' => 'suhu'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/suhu/suhu-edit', $data);
@@ -123,12 +128,12 @@ class Suhu extends CI_Controller {
 
 		redirect('suhu');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'suhu' => $this->suhu_model->get_suhu_by_plant(),
-			'active_nav' => 'verifikasi-suhu', 
+			'active_nav' => 'verifikasi-suhu',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -148,7 +153,7 @@ class Suhu extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Suhu Ruang berhasil di Update');
 				redirect('suhu/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Suhu Ruang gagal di Update');
 				redirect('suhu/verifikasi');
 			}
@@ -156,7 +161,8 @@ class Suhu extends CI_Controller {
 
 		$data = array(
 			'suhu' => $this->suhu_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-suhu');
+			'active_nav' => 'verifikasi-suhu'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/suhu/suhu-status', $data);
@@ -167,7 +173,7 @@ class Suhu extends CI_Controller {
 	{
 		$data = array(
 			'suhu' => $this->suhu_model->get_suhu_by_plant(),
-			'active_nav' => 'diketahui-suhu', 
+			'active_nav' => 'diketahui-suhu',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -182,12 +188,12 @@ class Suhu extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->suhu_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Suhu Ruang berhasil di Update');
 				redirect('suhu/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Suhu Ruang gagal di Update');
 				redirect('suhu/diketahui');
 			}
@@ -195,7 +201,8 @@ class Suhu extends CI_Controller {
 
 		$data = array(
 			'suhu' => $this->suhu_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-suhu');
+			'active_nav' => 'diketahui-suhu'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/suhu/suhu-statusprod', $data);
@@ -227,7 +234,7 @@ class Suhu extends CI_Controller {
 
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 11);
@@ -245,8 +252,8 @@ class Suhu extends CI_Controller {
 
 		$tanggal = $data['suhu']->date;
 		$datetime = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $datetime->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $datetime->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -293,8 +300,8 @@ class Suhu extends CI_Controller {
 			$pdf->Cell($col_suhu, $baris_tinggi, 'RH %', 1, 0, 'C');
 		}
 		$pdf->Cell($col_ket, $baris_tinggi, '', 0, 0);
-		$pdf->Cell($col_paraf, $baris_tinggi *2, 'QC', 1, 0, 'C');
-		$pdf->Cell($col_paraf, $baris_tinggi *2, 'PROD.', 1, 0, 'C');
+		$pdf->Cell($col_paraf, $baris_tinggi * 2, 'QC', 1, 0, 'C');
+		$pdf->Cell($col_paraf, $baris_tinggi * 2, 'PROD.', 1, 0, 'C');
 		$pdf->Cell($col_paraf, $baris_tinggi, '', 0, 1, 'C');
 
 		$pdf->Cell($col_pukul, $baris_tinggi, 'STD', 1, 0, 'C');
@@ -352,7 +359,7 @@ class Suhu extends CI_Controller {
 				if ($item_jam == $jam) {
 					$username = !empty($item->username) ? $item->username : '-';
 					$nama_produksi = !empty($item->nama_produksi) ? $item->nama_produksi : '-';
-					break; 
+					break;
 				}
 			}
 
@@ -362,13 +369,13 @@ class Suhu extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 11/00', 0, 1, 'R'); 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->Cell(190, 5, 'QN 11/00', 0, 1, 'R');
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($suhu_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -412,38 +419,38 @@ class Suhu extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['suhu']->nama_lengkap_produksi) && !empty($data['suhu']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['suhu']->tgl_update_produksi ?? $data['suhu']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['suhu']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['suhu']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['suhu']->tgl_update_spv)
-		? (new DateTime($data['suhu']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['suhu']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['suhu']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['suhu']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -453,7 +460,7 @@ class Suhu extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -501,7 +508,7 @@ class Suhu extends CI_Controller {
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 
-	// Logo
+		// Logo
 		$logo_path = FCPATH . 'assets/img/logo.jpg';
 		if (file_exists($logo_path)) {
 			$logo = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
@@ -515,10 +522,10 @@ class Suhu extends CI_Controller {
 			$logo->setWorksheet($sheet);
 		}
 
-// Ambil tanggal
+		// Ambil tanggal
 		$tanggal = $this->input->post('tanggal') ?: $this->input->get('tanggal');
 
-// Konversi hari ke Bahasa Indonesia
+		// Konversi hari ke Bahasa Indonesia
 		$nama_hari = [
 			'Sunday' => 'Minggu',
 			'Monday' => 'Senin',
@@ -532,7 +539,7 @@ class Suhu extends CI_Controller {
 		$hariInggris = date('l', strtotime($tanggal));
 		$hariIndonesia = $nama_hari[$hariInggris] ?? $hariInggris;
 
-	// Judul
+		// Judul
 		$sheet->mergeCells('C1:I1');
 		$sheet->setCellValue('C1', 'PEMERIKSAAN SUHU RUANG DAN KELEMBABAN RUANG');
 		$sheet->getStyle('C1')->getFont()->setBold(true)->setSize(14);
@@ -542,7 +549,7 @@ class Suhu extends CI_Controller {
 		$sheet->setCellValue('F3', 'Shift : ' . $data['suhu']->shift);
 		$sheet->mergeCells('F3:G3');
 
-	// Header tabel
+		// Header tabel
 		$sheet->mergeCells('A4:A5')->setCellValue('A4', 'Pukul');
 		$sheet->mergeCells('B4:C4')->setCellValue('B4', 'Ruang Produksi');
 		$sheet->mergeCells('D4:E4')->setCellValue('D4', 'Gudang Finish Good');
@@ -555,7 +562,7 @@ class Suhu extends CI_Controller {
 		$sheet->setCellValue('J6', 'QC');
 		$sheet->setCellValue('K6', 'PROD.');
 
-	// Baris STD
+		// Baris STD
 		$row = 6;
 		$sheet->setCellValue("A{$row}", 'STD');
 		$sheet->setCellValue("B{$row}", '20-30');
@@ -584,7 +591,7 @@ class Suhu extends CI_Controller {
 
 				foreach ($lokasi_arr as $lok) {
 					$nama_lokasi = strtolower($lok['nama'] ?? '');
-					
+
 					if (!$suhu_rp && preg_match('/produksi/', $nama_lokasi)) {
 						$suhu_rp = (object)[
 							'suhu' => $lok['suhu'] ?? '',
@@ -613,7 +620,7 @@ class Suhu extends CI_Controller {
 			$sheet->setCellValue("D{$row}", $suhu_fg->suhu ?? '');
 			$sheet->setCellValue("E{$row}", $suhu_fg->rh ?? '');
 
-    // Gabungkan keterangan
+			// Gabungkan keterangan
 			$keterangan_rp = ($suhu_rp && !empty($suhu_rp->keterangan)) ? "Produksi: {$suhu_rp->keterangan}" : '';
 			$keterangan_fg = ($suhu_fg && !empty($suhu_fg->keterangan)) ? "FG: {$suhu_fg->keterangan}" : '';
 			$keterangan_full = trim($keterangan_rp . ($keterangan_rp && $keterangan_fg ? "\n" : '') . $keterangan_fg);
@@ -628,7 +635,7 @@ class Suhu extends CI_Controller {
 			$defaultHeight = 15;
 			$sheet->getRowDimension($row)->setRowHeight($lineCount * $defaultHeight);
 
-    // Paraf dari QC dan Produksi
+			// Paraf dari QC dan Produksi
 			$nama_qc = $this->pegawai_model->get_nama_lengkap($suhu_rp->username ?? '');
 			$nama_prod = $this->pegawai_model->get_nama_lengkap($suhu_rp->nama_produksi ?? '');
 
@@ -637,14 +644,14 @@ class Suhu extends CI_Controller {
 		}
 
 
-	// Border dan alignment
+		// Border dan alignment
 		$sheet->getStyle("A4:K{$row}")->applyFromArray([
 			'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
 			'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER]
 		]);
 		$sheet->getStyle("J6:J{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-	// TTD dan QR Code
+		// TTD dan QR Code
 		$row += 3;
 		$startRowTTD = $row;
 
@@ -660,11 +667,11 @@ class Suhu extends CI_Controller {
 		$sheet->setCellValue("I{$row}", '');
 		$sheet->setCellValue("I" . ($row + 1), "Supervisor QC");
 
-	// QR QC
+		// QR QC
 		$qrPathSPV = FCPATH . 'assets/qr_spv.png';
 		$qrTextSPV = "Diverifikasi secara digital oleh:\n" .
-		($data['suhu']->nama_lengkap_spv ?: '-') .
-		"\nSupervisor QC Bread Crumb\nTanggal: " . ($data['suhu']->tgl_update_spv ?? '-');
+			($data['suhu']->nama_lengkap_spv ?: '-') .
+			"\nSupervisor QC Bread Crumb\nTanggal: " . ($data['suhu']->tgl_update_spv ?? '-');
 		QRcode::png($qrTextSPV, $qrPathSPV, QR_ECLEVEL_H, 4);
 		$drawingSPV = new Drawing();
 		$drawingSPV->setPath($qrPathSPV);
@@ -674,8 +681,8 @@ class Suhu extends CI_Controller {
 
 		$qrPathProd = FCPATH . 'assets/qr_produksi.png';
 		$qrTextProd = "Diverifikasi secara digital oleh:\n" .
-		($data['suhu']->nama_lengkap_produksi ?: '-') .
-		"\nForeman/Forelady Produksi\nTanggal: " . ($data['suhu']->tgl_update_produksi ?? '-');
+			($data['suhu']->nama_lengkap_produksi ?: '-') .
+			"\nForeman/Forelady Produksi\nTanggal: " . ($data['suhu']->tgl_update_produksi ?? '-');
 		QRcode::png($qrTextProd, $qrPathProd, QR_ECLEVEL_H, 4);
 		$drawingProd = new Drawing();
 		$drawingProd->setPath($qrPathProd);
@@ -683,7 +690,7 @@ class Suhu extends CI_Controller {
 		$drawingProd->setHeight(80);
 		$drawingProd->setWorksheet($sheet);
 
-	// Export
+		// Export
 		$filename = 'Suhu_Ruang_' . date('d-m-Y', strtotime($tanggal)) . '.xlsx';
 		ob_end_clean();
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -693,6 +700,4 @@ class Suhu extends CI_Controller {
 		$writer->save('php://output');
 		exit;
 	}
-
 }
-

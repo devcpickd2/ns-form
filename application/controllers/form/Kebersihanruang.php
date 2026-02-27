@@ -1,11 +1,14 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Kebersihanruang extends CI_Controller {
+class Kebersihanruang extends CI_Controller
+{
 
 	public function __construct()
 	{
@@ -13,18 +16,18 @@ class Kebersihanruang extends CI_Controller {
 
 		$this->load->library('form_validation');
 		$this->load->library('session');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('kebersihanruang_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
-		} 
+		}
 	}
 
 	public function index()
 	{
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_data_by_plant(),
-			'active_nav' => 'kebersihanruang', 
+			'active_nav' => 'kebersihanruang',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Kebersihanruang extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_by_uuid($uuid),
-			'active_nav' => 'kebersihanruang');
+			'active_nav' => 'kebersihanruang'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanruang/kebersihanruang-detail', $data);
@@ -54,14 +58,15 @@ class Kebersihanruang extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Ruang Produksi berhasil di simpan');
 				redirect('kebersihanruang');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Ruang Produksi gagal di simpan');
 				redirect('kebersihanruang');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'kebersihanruang');
+			'active_nav' => 'kebersihanruang'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanruang/kebersihanruang-tambah');
@@ -114,12 +119,12 @@ class Kebersihanruang extends CI_Controller {
 
 		redirect('kebersihanruang');
 	}
-	
+
 	public function verifikasi()
 	{
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-kebersihanruang', 
+			'active_nav' => 'verifikasi-kebersihanruang',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -139,7 +144,7 @@ class Kebersihanruang extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Ruang Produksi berhasil di Update');
 				redirect('kebersihanruang/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Ruang Produksi gagal di Update');
 				redirect('kebersihanruang/verifikasi');
 			}
@@ -147,7 +152,8 @@ class Kebersihanruang extends CI_Controller {
 
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-kebersihanruang');
+			'active_nav' => 'verifikasi-kebersihanruang'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanruang/kebersihanruang-status', $data);
@@ -158,7 +164,7 @@ class Kebersihanruang extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-kebersihanruang', 
+			'active_nav' => 'diketahui-kebersihanruang',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -173,12 +179,12 @@ class Kebersihanruang extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->kebersihanruang_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Kebersihan Ruang Produksi berhasil di Update');
 				redirect('kebersihanruang/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Kebersihan Ruang Produksi gagal di Update');
 				redirect('kebersihanruang/diketahui');
 			}
@@ -186,7 +192,8 @@ class Kebersihanruang extends CI_Controller {
 
 		$data = array(
 			'kebersihanruang' => $this->kebersihanruang_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-kebersihanruang');
+			'active_nav' => 'diketahui-kebersihanruang'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanruang/kebersihanruang-statusprod', $data);
@@ -195,7 +202,7 @@ class Kebersihanruang extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -205,12 +212,12 @@ class Kebersihanruang extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$kebersihanruang_data = $this->kebersihanruang_model->get_by_date($tanggal, $plant); 
-		$kebersihanruang_data_verif = $this->kebersihanruang_model->get_last_verif_by_date($tanggal, $plant); 
+		$kebersihanruang_data = $this->kebersihanruang_model->get_by_date($tanggal, $plant);
+		$kebersihanruang_data_verif = $this->kebersihanruang_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$kebersihanruang_data || !$kebersihanruang_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('kebersihanruang/verifikasi'); 
+			redirect('kebersihanruang/verifikasi');
 		}
 
 		$data['kebersihanruang'] = $kebersihanruang_data_verif;
@@ -223,7 +230,7 @@ class Kebersihanruang extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -242,9 +249,8 @@ class Kebersihanruang extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['kebersihanruang']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -307,21 +313,21 @@ class Kebersihanruang extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 04/00', 0, 1, 'R'); 
-		
+		$pdf->Cell(190, 5, 'QN 04/00', 0, 1, 'R');
+
 		$y_last = $pdf->GetY();
-		$y_last += 5; 
+		$y_last += 5;
 
 		$pdf->SetFont('times', '', 7);
-		$pdf->SetY($pdf->GetY() + 3); 
+		$pdf->SetY($pdf->GetY() + 3);
 		$pdf->SetFont('dejavusans', '', 5);
 		$kiri = "1 Berdebu\n2 Basah, ada genangan air\n3 Sisa produksi (remah-remah roti, tepung, sisa adonan)\n4 Noda (karat, cat, tinta)\n5 Pertumbuhan mikroorganisme (jamur, bau busuk, biofilm)\n6 Kontak / kontaminasi material non halal\n7 Higiene karyawan tidak sesuai GMP";
 		$kanan = "✓ : Ok, sesuai SSOP, bersih, bebas najis / material non halal\n✗ : Tidak Ok, tidak sesuai SSOP\n-  : Tidak ada atau tidak digunakan";
 		$posY = $pdf->GetY();
 		$pdf->SetXY(10, $posY);
 		$pdf->MultiCell(90, 4, $kiri, 0, 'L');
-		$pdf->SetXY(105, $posY); 
-		$pdf->MultiCell(90, 4, $kanan, 0, 'L'); 
+		$pdf->SetXY(105, $posY);
+		$pdf->MultiCell(90, 4, $kanan, 0, 'L');
 
 		$y_after_keterangan = $pdf->GetY() + 5;
 		$status_verifikasi = true;
@@ -406,38 +412,38 @@ class Kebersihanruang extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['kebersihanruang']->nama_lengkap_produksi) && !empty($data['kebersihanruang']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['kebersihanruang']->tgl_update_produksi ?? $data['kebersihanruang']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['kebersihanruang']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['kebersihanruang']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['kebersihanruang']->tgl_update_spv)
-		? (new DateTime($data['kebersihanruang']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['kebersihanruang']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['kebersihanruang']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['kebersihanruang']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -447,7 +453,7 @@ class Kebersihanruang extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -472,4 +478,3 @@ class Kebersihanruang extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

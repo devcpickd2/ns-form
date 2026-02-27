@@ -1,21 +1,24 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Kebersihanperalatan extends CI_Controller {
+class Kebersihanperalatan extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('kebersihanperalatan_model');
 		$this->load->model('peralatan_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -24,7 +27,7 @@ class Kebersihanperalatan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_data_by_plant(),
-			'active_nav' => 'kebersihanperalatan', 
+			'active_nav' => 'kebersihanperalatan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Kebersihanperalatan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_by_uuid($uuid),
-			'active_nav' => 'kebersihanperalatan');
+			'active_nav' => 'kebersihanperalatan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanperalatan/kebersihanperalatan-detail', $data);
@@ -81,7 +85,7 @@ class Kebersihanperalatan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Peralatan berhasil di Update');
 				redirect('kebersihanperalatan');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Peralatan gagal di Update');
 				redirect('kebersihanperalatan');
 			}
@@ -89,7 +93,8 @@ class Kebersihanperalatan extends CI_Controller {
 
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_by_uuid($uuid),
-			'active_nav' => 'kebersihanperalatan');
+			'active_nav' => 'kebersihanperalatan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanperalatan/kebersihanperalatan-edit', $data);
@@ -119,7 +124,7 @@ class Kebersihanperalatan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-kebersihanperalatan', 
+			'active_nav' => 'verifikasi-kebersihanperalatan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -139,7 +144,7 @@ class Kebersihanperalatan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Kebersihan Peralatan berhasil di Update');
 				redirect('kebersihanperalatan/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Kebersihan Peralatan gagal di Update');
 				redirect('kebersihanperalatan/verifikasi');
 			}
@@ -147,7 +152,8 @@ class Kebersihanperalatan extends CI_Controller {
 
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-kebersihanperalatan');
+			'active_nav' => 'verifikasi-kebersihanperalatan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanperalatan/kebersihanperalatan-status', $data);
@@ -158,7 +164,7 @@ class Kebersihanperalatan extends CI_Controller {
 	{
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-kebersihanperalatan', 
+			'active_nav' => 'diketahui-kebersihanperalatan',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -178,7 +184,7 @@ class Kebersihanperalatan extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Kebersihan Peralatan berhasil di Update');
 				redirect('kebersihanperalatan/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Kebersihan Peralatan gagal di Update');
 				redirect('kebersihanperalatan/diketahui');
 			}
@@ -186,7 +192,8 @@ class Kebersihanperalatan extends CI_Controller {
 
 		$data = array(
 			'kebersihanperalatan' => $this->kebersihanperalatan_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-kebersihanperalatan');
+			'active_nav' => 'diketahui-kebersihanperalatan'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/kebersihanperalatan/kebersihanperalatan-statusprod', $data);
@@ -195,8 +202,8 @@ class Kebersihanperalatan extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
-		$shift   = $this->input->post('shift'); 
+		$tanggal = $this->input->post('tanggal');
+		$shift   = $this->input->post('shift');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -206,8 +213,8 @@ class Kebersihanperalatan extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$kebersihanperalatan_data = $this->kebersihanperalatan_model->get_by_date($tanggal, $plant, $shift); 
-		$kebersihanperalatan_data_verif = $this->kebersihanperalatan_model->get_last_verif_by_date($tanggal, $plant, $shift); 
+		$kebersihanperalatan_data = $this->kebersihanperalatan_model->get_by_date($tanggal, $plant, $shift);
+		$kebersihanperalatan_data_verif = $this->kebersihanperalatan_model->get_last_verif_by_date($tanggal, $plant, $shift);
 
 		if (!$kebersihanperalatan_data || !$kebersihanperalatan_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
@@ -219,7 +226,7 @@ class Kebersihanperalatan extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 10);
@@ -238,9 +245,8 @@ class Kebersihanperalatan extends CI_Controller {
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['kebersihanperalatan']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 10);
 		$pdf->SetX(10);
@@ -287,14 +293,14 @@ class Kebersihanperalatan extends CI_Controller {
 		$data['kebersihanperalatan']->nama_lengkap_produksi = $this->pegawai_model->get_nama_lengkap($data['kebersihanperalatan']->nama_produksi);
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 15/00', 0, 1, 'R'); 
+		$pdf->Cell(190, 5, 'QN 15/00', 0, 1, 'R');
 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($kebersihanperalatan_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(10, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(10, 0, '', 0, 0, 'L');
 				$pdf->Cell(200, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -381,38 +387,38 @@ class Kebersihanperalatan extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['kebersihanperalatan']->nama_lengkap_produksi) && !empty($data['kebersihanperalatan']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['kebersihanperalatan']->tgl_update_produksi ?? $data['kebersihanperalatan']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['kebersihanperalatan']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['kebersihanperalatan']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['kebersihanperalatan']->tgl_update_spv)
-		? (new DateTime($data['kebersihanperalatan']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['kebersihanperalatan']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['kebersihanperalatan']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['kebersihanperalatan']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -422,7 +428,7 @@ class Kebersihanperalatan extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -446,4 +452,3 @@ class Kebersihanperalatan extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

@@ -256,7 +256,7 @@ class Verifikasimagnet extends CI_Controller {
 			setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 			$tanggal = $verifikasimagnet->date;
 			$date = new DateTime($tanggal);
-			$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
+			$formatted_date  = $date->format('l, d F Y');
 			$pdf->SetFont('times', '', 8);
 			
 			$pdf->Cell(32, 6, $formatted_date, 1, 0, 'C');

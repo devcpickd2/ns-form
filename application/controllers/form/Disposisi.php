@@ -1,11 +1,14 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Disposisi extends CI_Controller {
+class Disposisi extends CI_Controller
+{
 
 	public function __construct()
 	{
@@ -13,9 +16,9 @@ class Disposisi extends CI_Controller {
 
 		$this->load->library('form_validation');
 		$this->load->library('session');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('disposisi_model');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -24,7 +27,7 @@ class Disposisi extends CI_Controller {
 	{
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_data_by_plant(),
-			'active_nav' => 'disposisi', 
+			'active_nav' => 'disposisi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Disposisi extends CI_Controller {
 	{
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_by_uuid($uuid),
-			'active_nav' => 'disposisi');
+			'active_nav' => 'disposisi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/disposisi/disposisi-detail', $data);
@@ -54,14 +58,15 @@ class Disposisi extends CI_Controller {
 			if ($insert) {
 				$this->session->set_flashdata('success_msg', 'Data Disposisi Produk dan Prosedur berhasil di simpan');
 				redirect('disposisi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Disposisi Produk dan Prosedur gagal di simpan');
 				redirect('disposisi');
 			}
 		}
 
 		$data = array(
-			'active_nav' => 'disposisi');
+			'active_nav' => 'disposisi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/disposisi/disposisi-tambah');
@@ -118,7 +123,7 @@ class Disposisi extends CI_Controller {
 	{
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-disposisi', 
+			'active_nav' => 'verifikasi-disposisi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -138,7 +143,7 @@ class Disposisi extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Disposisi Produk dan Prosedur berhasil di Update');
 				redirect('disposisi/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Disposisi Produk dan Prosedur gagal di Update');
 				redirect('disposisi/verifikasi');
 			}
@@ -146,7 +151,8 @@ class Disposisi extends CI_Controller {
 
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-disposisi');
+			'active_nav' => 'verifikasi-disposisi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/disposisi/disposisi-status', $data);
@@ -157,7 +163,7 @@ class Disposisi extends CI_Controller {
 	{
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-disposisi', 
+			'active_nav' => 'diketahui-disposisi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -172,12 +178,12 @@ class Disposisi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->disposisi_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Disposisi Produk dan Prosedur berhasil di Update');
 				redirect('disposisi/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Disposisi Produk dan Prosedur gagal di Update');
 				redirect('disposisi/diketahui');
 			}
@@ -185,7 +191,8 @@ class Disposisi extends CI_Controller {
 
 		$data = array(
 			'disposisi' => $this->disposisi_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-disposisi');
+			'active_nav' => 'diketahui-disposisi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/disposisi/disposisi-statusprod', $data);
@@ -194,7 +201,7 @@ class Disposisi extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -204,12 +211,12 @@ class Disposisi extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$disposisi_data = $this->disposisi_model->get_by_date($tanggal, $plant); 
-		$disposisi_data_verif = $this->disposisi_model->get_last_verif_by_date($tanggal, $plant); 
+		$disposisi_data = $this->disposisi_model->get_by_date($tanggal, $plant);
+		$disposisi_data_verif = $this->disposisi_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$disposisi_data || !$disposisi_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('disposisi/verifikasi'); 
+			redirect('disposisi/verifikasi');
 		}
 
 		$data['disposisi'] = $disposisi_data_verif;
@@ -222,15 +229,15 @@ class Disposisi extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 
 		setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'indonesian');
 		$tanggal = $data['disposisi']->date;
 		$date = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $date->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $date->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$labelWidth = 30;
 		$colonWidth = 2;
@@ -238,7 +245,7 @@ class Disposisi extends CI_Controller {
 		$totalWidth = $labelWidth + $colonWidth + $valueWidth;
 
 		$startX = 15;
-		$startY = $pdf->GetY(); 
+		$startY = $pdf->GetY();
 
 		$logo_path = FCPATH . 'assets/img/logo.jpg';
 		if (file_exists($logo_path)) {
@@ -288,8 +295,8 @@ class Disposisi extends CI_Controller {
 		$pdf->MultiCell($valueWidth, 5, $data['disposisi']->catatan, 0, 'L');
 		$pdf->Cell($colonWidth, 2, '', 0, 1, 'L');
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 18/00', 0, 1, 'R'); 
-		$endY = $pdf->GetY(); 
+		$pdf->Cell(190, 5, 'QN 18/00', 0, 1, 'R');
+		$endY = $pdf->GetY();
 		$pdf->Rect($startX, $startY, $totalWidth, $endY - $startY);
 
 		$pdf->SetFont('times', '', 10);
@@ -306,15 +313,15 @@ class Disposisi extends CI_Controller {
 		$pdf->Rect($startX, $ccStartY, $totalWidth, $ccEndY - $ccStartY);
 
 		$boxWidth = $totalWidth / 3;
-		$boxHeight = 42; 
+		$boxHeight = 42;
 		$pdf->Rect($startX, $ccEndY, $totalWidth, $boxHeight);
 		$pdf->Line($startX + $boxWidth, $ccEndY, $startX + $boxWidth, $ccEndY + $boxHeight);
 		$pdf->Line($startX + 2 * $boxWidth, $ccEndY, $startX + 2 * $boxWidth, $ccEndY + $boxHeight);
 		$pdf->SetFont('times', '', 10);
 
-		$labelY    = $ccEndY + 2;  
-		$lineY     = $labelY + 25; 
-		$titleY    = $lineY + 5; 
+		$labelY    = $ccEndY + 2;
+		$lineY     = $labelY + 25;
+		$titleY    = $lineY + 5;
 
 		$pdf->SetXY($startX, $labelY);
 		$pdf->Cell($boxWidth, 6, 'Dibuat Oleh :', 0, 0, 'C');
@@ -342,4 +349,3 @@ class Disposisi extends CI_Controller {
 		$pdf->Output($filename, 'I');
 	}
 }
-

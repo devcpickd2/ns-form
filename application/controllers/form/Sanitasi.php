@@ -1,21 +1,24 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Dompdf\Dompdf;
+
 setlocale(LC_TIME, 'id_ID.UTF-8');
 
-class Sanitasi extends CI_Controller {
+class Sanitasi extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		$this->load->model('auth_model'); 
+		$this->load->model('auth_model');
 		$this->load->model('sanitasi_model');
 		$this->load->library('upload');
-		if(!$this->auth_model->current_user()){
+		if (!$this->auth_model->current_user()) {
 			redirect('login');
 		}
 	}
@@ -24,7 +27,7 @@ class Sanitasi extends CI_Controller {
 	{
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_data_by_plant(),
-			'active_nav' => 'sanitasi', 
+			'active_nav' => 'sanitasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -36,7 +39,8 @@ class Sanitasi extends CI_Controller {
 	{
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_by_uuid($uuid),
-			'active_nav' => 'sanitasi');
+			'active_nav' => 'sanitasi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasi/sanitasi-detail', $data);
@@ -55,7 +59,7 @@ class Sanitasi extends CI_Controller {
 			}
 		}
 
-		return true; 
+		return true;
 	}
 
 	public function tambah()
@@ -69,7 +73,7 @@ class Sanitasi extends CI_Controller {
 				'upload_path'   => "./uploads/",
 				'allowed_types' => "jpg|jpeg|png|pdf",
 				'overwrite'     => TRUE,
-				'max_size'      => 2048, 
+				'max_size'      => 2048,
 				'encrypt_name'  => TRUE
 			);
 
@@ -81,13 +85,12 @@ class Sanitasi extends CI_Controller {
 				$error = $this->upload->display_errors();
 				$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 				redirect('sanitasi/tambah');
-
 			} else {
 
 				$data = $this->upload->data();
 				$file_name = $data['file_name'];
 
-            // 🔥 Kompres jika gambar
+				// 🔥 Kompres jika gambar
 				if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
 
 					$config_img = array(
@@ -143,17 +146,17 @@ class Sanitasi extends CI_Controller {
 				'upload_path'   => "./uploads/",
 				'allowed_types' => "jpg|jpeg|png|pdf",
 				'overwrite'     => FALSE,
-				'max_size'      => 2048, 
+				'max_size'      => 2048,
 				'encrypt_name'  => TRUE
 			);
 
 			$this->load->library('upload');
 			$this->upload->initialize($config);
 
-        // Default pakai file lama
+			// Default pakai file lama
 			$file_name = $sanitasi->hand_basin;
 
-        // Jika ada file baru diupload
+			// Jika ada file baru diupload
 			if (!empty($_FILES['hand_basin']['name'])) {
 
 				if (!$this->upload->do_upload('hand_basin')) {
@@ -161,13 +164,12 @@ class Sanitasi extends CI_Controller {
 					$error = $this->upload->display_errors();
 					$this->session->set_flashdata('error_msg', 'Upload gagal: ' . $error);
 					redirect('sanitasi/edit/' . $uuid);
-
 				} else {
 
 					$data = $this->upload->data();
 					$file_name = $data['file_name'];
 
-                // 🔥 Kompres jika gambar
+					// 🔥 Kompres jika gambar
 					if (in_array(strtolower($data['file_ext']), ['.jpg', '.jpeg', '.png'])) {
 
 						$config_img = array(
@@ -189,7 +191,7 @@ class Sanitasi extends CI_Controller {
 						$this->image_lib->clear();
 					}
 
-                // 🔥 Hapus file lama
+					// 🔥 Hapus file lama
 					if (!empty($sanitasi->hand_basin) && file_exists('./uploads/' . $sanitasi->hand_basin)) {
 						unlink('./uploads/' . $sanitasi->hand_basin);
 					}
@@ -234,13 +236,13 @@ class Sanitasi extends CI_Controller {
 
 		redirect('sanitasi');
 	}
-	
-	
+
+
 	public function verifikasi()
 	{
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_data_by_plant(),
-			'active_nav' => 'verifikasi-sanitasi', 
+			'active_nav' => 'verifikasi-sanitasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -260,7 +262,7 @@ class Sanitasi extends CI_Controller {
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Data Pemeriksaan Sanitasi berhasil di Update');
 				redirect('sanitasi/verifikasi');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Data Pemeriksaan Sanitasi gagal di Update');
 				redirect('sanitasi/verifikasi');
 			}
@@ -268,7 +270,8 @@ class Sanitasi extends CI_Controller {
 
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_by_uuid($uuid),
-			'active_nav' => 'verifikasi-sanitasi');
+			'active_nav' => 'verifikasi-sanitasi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasi/sanitasi-status', $data);
@@ -279,7 +282,7 @@ class Sanitasi extends CI_Controller {
 	{
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_data_by_plant(),
-			'active_nav' => 'diketahui-sanitasi', 
+			'active_nav' => 'diketahui-sanitasi',
 		);
 
 		$this->load->view('partials/head', $data);
@@ -294,12 +297,12 @@ class Sanitasi extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == TRUE) {
-			
+
 			$update = $this->sanitasi_model->diketahui_update($uuid);
 			if ($update) {
 				$this->session->set_flashdata('success_msg', 'Status Pemeriksaan Sanitasi berhasil di Update');
 				redirect('sanitasi/diketahui');
-			}else {
+			} else {
 				$this->session->set_flashdata('error_msg', 'Status Pemeriksaan Sanitasi gagal di Update');
 				redirect('sanitasi/diketahui');
 			}
@@ -307,7 +310,8 @@ class Sanitasi extends CI_Controller {
 
 		$data = array(
 			'sanitasi' => $this->sanitasi_model->get_by_uuid($uuid),
-			'active_nav' => 'diketahui-sanitasi');
+			'active_nav' => 'diketahui-sanitasi'
+		);
 
 		$this->load->view('partials/head', $data);
 		$this->load->view('form/sanitasi/sanitasi-statusprod', $data);
@@ -316,7 +320,7 @@ class Sanitasi extends CI_Controller {
 
 	public function cetak()
 	{
-		$tanggal = $this->input->post('tanggal');  
+		$tanggal = $this->input->post('tanggal');
 
 		log_message('debug', 'Tanggal yang dipilih: ' . print_r($tanggal, true));
 
@@ -326,12 +330,12 @@ class Sanitasi extends CI_Controller {
 
 		$plant = $this->session->userdata('plant');
 
-		$sanitasi_data = $this->sanitasi_model->get_by_date($tanggal, $plant); 
-		$sanitasi_data_verif = $this->sanitasi_model->get_last_verif_by_date($tanggal, $plant); 
+		$sanitasi_data = $this->sanitasi_model->get_by_date($tanggal, $plant);
+		$sanitasi_data_verif = $this->sanitasi_model->get_last_verif_by_date($tanggal, $plant);
 
 		if (!$sanitasi_data || !$sanitasi_data_verif) {
 			$this->session->set_flashdata('error_msg', 'Data tidak ditemukan untuk tanggal yang dipilih.');
-			redirect('sanitasi/verifikasi'); 
+			redirect('sanitasi/verifikasi');
 		}
 
 		$data['sanitasi'] = $sanitasi_data_verif;
@@ -344,7 +348,7 @@ class Sanitasi extends CI_Controller {
 		require_once APPPATH . 'third_party/tcpdf/tcpdf.php';
 
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LEGAL', true, 'UTF-8', false);
-		$pdf->setPrintHeader(false); 
+		$pdf->setPrintHeader(false);
 		$pdf->SetMargins(10, 14, 10);
 		$pdf->AddPage();
 		$pdf->SetFont('times', 'B', 12);
@@ -362,8 +366,8 @@ class Sanitasi extends CI_Controller {
 
 		$tanggal = $data['sanitasi']->date;
 		$datetime = new DateTime($tanggal);
-		$formatted_date = strftime('%A, %d %B %Y', $datetime->getTimestamp());
-		$formatted_date2 = strftime('%d %B %Y', $datetime->getTimestamp());
+		$formatted_date  = $date->format('l, d F Y');
+		$formatted_date2 = $date->format('d F Y');
 
 		$pdf->SetFont('times', '', 9);
 		$pdf->SetX(10);
@@ -375,7 +379,7 @@ class Sanitasi extends CI_Controller {
 		$pdf->SetFont('times', '', 9);
 		$pdf->Cell(15, 10, 'Pukul', 1, 0, 'C');
 		$pdf->Cell(80, 5, 'AREA HAND BASIN', 1, 0, 'C');
-		$pdf->Cell(60 ,10, 'Keterangan', 1, 0, 'C');
+		$pdf->Cell(60, 10, 'Keterangan', 1, 0, 'C');
 		$pdf->Cell(38, 5, 'Paraf', 1, 1, 'C');
 		$pdf->Cell(15, 5, '', 0, 0, 'L');
 		$pdf->Cell(40, 5, 'Standar (50 ppm)', 1, 0, 'C');
@@ -397,18 +401,18 @@ class Sanitasi extends CI_Controller {
 			$pdf->Cell(40, 10, $std_symbol, 1, 0, 'C');
 			$pdf->SetFont('times', '', 8);
 
-    // Jika ada file gambar
+			// Jika ada file gambar
 			if (!empty($sanitasi->hand_basin) && file_exists(FCPATH . 'uploads/' . $sanitasi->hand_basin)) {
-				$x = $pdf->GetX(); 
+				$x = $pdf->GetX();
 				$y = $pdf->GetY();
 
-        // Buat cell kosong dulu
+				// Buat cell kosong dulu
 				$pdf->Cell(40, 10, '', 1, 0, 'C');
 
-        // Hitung ukuran asli gambar
+				// Hitung ukuran asli gambar
 				list($img_width, $img_height) = getimagesize(FCPATH . 'uploads/' . $sanitasi->hand_basin);
 
-        // Skala agar muat ke cell (max 36x8 biar ada margin)
+				// Skala agar muat ke cell (max 36x8 biar ada margin)
 				$max_w = 36;
 				$max_h = 8;
 				$scale = min($max_w / $img_width, $max_h / $img_height);
@@ -416,11 +420,11 @@ class Sanitasi extends CI_Controller {
 				$new_w = $img_width * $scale;
 				$new_h = $img_height * $scale;
 
-        // Posisi tengah di dalam cell
+				// Posisi tengah di dalam cell
 				$img_x = $x + (40 - $new_w) / 2;
 				$img_y = $y + (10 - $new_h) / 2;
 
-        // Masukkan gambar
+				// Masukkan gambar
 				$pdf->Image(FCPATH . 'uploads/' . $sanitasi->hand_basin, $img_x, $img_y, $new_w, $new_h);
 			} else {
 				$pdf->Cell(40, 10, '-', 1, 0, 'C');
@@ -432,13 +436,13 @@ class Sanitasi extends CI_Controller {
 		}
 
 		$pdf->SetFont('times', 'I', 7);
-		$pdf->Cell(190, 5, 'QN 03/00', 0, 1, 'R'); 
-		$pdf->SetY($pdf->GetY() + 2); 
+		$pdf->Cell(190, 5, 'QN 03/00', 0, 1, 'R');
+		$pdf->SetY($pdf->GetY() + 2);
 		$pdf->SetFont('times', '', 8);
 		$pdf->Cell(5, 3, 'Catatan : ', 0, 1, 'L');
 		foreach ($sanitasi_data as $item) {
 			if (!empty($item->catatan)) {
-				$pdf->Cell(13, 0, '', 0, 0, 'L'); 
+				$pdf->Cell(13, 0, '', 0, 0, 'L');
 				$pdf->Cell(13, 0, ' - ' . $item->catatan, 0, 1, 'L');
 			}
 		}
@@ -526,38 +530,38 @@ class Sanitasi extends CI_Controller {
 		}
 
 		$qc_nama_text = !empty($qc_nama_lengkap)
-		? implode(', ', array_unique($qc_nama_lengkap))
-		: '-';
+			? implode(', ', array_unique($qc_nama_lengkap))
+			: '-';
 
 		$qc_tanggal = $qc_created_at
-		? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($qc_created_at))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_qc_text = "Dibuat secara digital oleh,\n"
-		. $qc_nama_text . "\n"
-		. "QC Inspector\n"
-		. $qc_tanggal;
+			. $qc_nama_text . "\n"
+			. "QC Inspector\n"
+			. $qc_tanggal;
 
 		$qr_produksi_text = null;
 
 		if (!empty($data['sanitasi']->nama_lengkap_produksi) && !empty($data['sanitasi']->tgl_update_produksi)) {
 			$prod_tanggal = (new DateTime($data['sanitasi']->tgl_update_produksi ?? $data['sanitasi']->tgl_update_produksi))
-			->format('d-m-Y | H:i');
+				->format('d-m-Y | H:i');
 
 			$qr_produksi_text = "Diketahui secara digital oleh,\n"
-			. $data['sanitasi']->nama_lengkap_produksi . "\n"
-			. "Foreman/Forelady Produksi\n"
-			. $prod_tanggal;
+				. $data['sanitasi']->nama_lengkap_produksi . "\n"
+				. "Foreman/Forelady Produksi\n"
+				. $prod_tanggal;
 		}
 
 		$spv_tanggal = !empty($data['sanitasi']->tgl_update_spv)
-		? (new DateTime($data['sanitasi']->tgl_update_spv))->format('d-m-Y | H:i')
-		: '-';
+			? (new DateTime($data['sanitasi']->tgl_update_spv))->format('d-m-Y | H:i')
+			: '-';
 
 		$qr_spv_text = "Disetujui secara digital oleh,\n"
-		. $data['sanitasi']->nama_lengkap_spv . "\n"
-		. "Supervisor QC Bread Crumb\n"
-		. $spv_tanggal;
+			. $data['sanitasi']->nama_lengkap_spv . "\n"
+			. "Supervisor QC Bread Crumb\n"
+			. $spv_tanggal;
 
 		if ($status_verifikasi) {
 			$pdf->SetFont('times', '', 8);
@@ -567,7 +571,7 @@ class Sanitasi extends CI_Controller {
 			$pdf->Cell(45, 5, 'Diketahui Oleh,', 0, 0, 'C');
 			$pdf->SetXY(150, $y_ttd);
 			$pdf->Cell(45, 5, 'Disetujui Oleh,', 0, 1, 'C');
-			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35,$y_ttd + 5, $qr_size, $qr_size, null, 'N');
+			$pdf->write2DBarcode($qr_qc_text, 'QRCODE,L', 35, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			if ($qr_produksi_text) {
 				$pdf->write2DBarcode($qr_produksi_text, 'QRCODE,L', 100, $y_ttd + 5, $qr_size, $qr_size, null, 'N');
 			}
@@ -591,6 +595,4 @@ class Sanitasi extends CI_Controller {
 		$filename = "Pemeriksaan Sanitasi_{$formatted_date2}.pdf";
 		$pdf->Output($filename, 'I');
 	}
-
 }
-
